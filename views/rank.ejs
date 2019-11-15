@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MiniGames</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <% include ./header %>
+    </header>
+    <br>
+
+    <div class="container">
+        <div class="btn-group btn-group-justified" role="group" aria-label="...">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default"><strong>CATCH MY MIND</strong></button>
+            </div>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default">GAME2</button>
+            </div>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default">GAME3</button>
+            </div>
+        </div>
+        <br>
+
+        <table class="table table-hover">
+            <thead>
+                <th>#</th>
+                <th>USER</th>
+                <th>SCORE</th>
+                <th>COMMENTS</th>
+            </thead>
+
+            <% for (let i=0; i<20; i++) { %>
+            <tr>
+                <td> <%= i+1 %></td>
+                <td> MIN </td>
+                <td> <%= 1000 - i %></td>
+                <td> hihihihi</td>
+            </tr>
+            <% } %>
+        </table>
+
+
+
+        <% include ./footer %>
+    </div>
+</body>
+
+</html>

@@ -1,19 +1,21 @@
 {
-  "name": "minigame-remaster",
-  "version": "0.0.0",
-  "private": true,
+  "name": "minigames",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "http-errors": "~1.6.3",
-    "mongodb": "^3.3.3",
-    "morgan": "~1.9.1",
-    "mysql": "^2.17.1",
+    "body-parser": "^1.19.0",
+    "ejs": "^2.7.2",
+    "express": "^4.17.1",
     "mysql2": "^2.0.0",
-    "pug": "2.0.0-beta11"
+    "nodemon": "^1.19.4",
+    "path": "^0.12.7",
+    "socket.io": "^2.3.0"
   }
 }
