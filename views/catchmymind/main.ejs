@@ -20,6 +20,11 @@
             <button type="submit" class="btn btn-primary">Send</button>
         </form>
         <div id="chatLogs"></div>
+        <button id="update">update</button>
+        <button id="exit" onclick="location.href='/game'">exit</button>
+        <div id="userList" style="background-color: cornflowerblue;">
+            <h4>user list</h4>
+        </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -35,14 +40,34 @@
                 userid: "ungmo2@gmail.com"
             });
 
+            $('button#update').click(function (e) {
+                e.preventDefault();
+                socket.emit('update');
+            });
+
+
+
+            socket.on('update', function (data) {
+                const d = JSON.parse(data);
+                $('#userList').remove();
+                for (let i = 0; i < d.list.length; i++) {
+                    const li = d.list[i];
+                    $('#userList').append('<p>' + li + '</p>');
+                }
+            });
+
+
             // 서버로부터의 메시지가 수신되면
             socket.on("login", function (data) {
-                $("#chatLogs").append("<div><strong>" + data + "</strong> has joined</div>");
+                $("#chatLogs").append("<div><strong>" + data.name + "</strong> has joined</div>");
+                for (var i = 0; i < data.list.length; i++) {
+                    $("#userList").append('<p>' + data.list[i] + '</p>');
+                }
             });
 
             // 서버로부터의 메시지가 수신되면
-            socket.on("chat", function (data) {
-                $("#chatLogs").append("<div>" + data.msg + " : from <strong>" + data.from.name + "</strong></div>");
+            socket.on("s2c chat", function (data) {
+                $("#chatLogs").append("<div>" + data.from.name + " : " + data.msg + "</strong></div>");
             });
 
             // Send 버튼이 클릭되면
@@ -54,6 +79,11 @@
                 socket.emit("chat", { msg: $msgForm.val() });
                 $msgForm.val("");
             });
+
+            $("#exit").click(function (e) {
+                e.preventDefault();
+                socket.emit('disconnect');
+            })
 
             function makeRandomName() {
                 var name = "";

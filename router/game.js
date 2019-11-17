@@ -6,6 +6,10 @@ router.get('/1', (req,res) => {
     res.render('catchmymind/main');
 });
 
+router.get('/', (req,res) => {
+    res.render('waitingroom')
+})
+
 
 
 module.exports = router;
