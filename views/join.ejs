@@ -81,6 +81,90 @@
                 result.innerHTML = '사용가능한 비밀번호 입니다.'
             }
         })
+        document.querySelector("#inputID").addEventListener("keyup",function(){
+            var inputData= document.getElementById("inputID").value;
+            if (inputData.length<6){
+                var resultDiv = document.querySelector('#idCheck')
+                resultDiv.style.color = 'red';
+                resultDiv.innerHTML = "아이디가 너무 짧습니다. 6글자 이상으로 정해주세요 ";
+
+            }
+            else {
+                sendAjax("http://localhost:3000/check/id",inputData)
+            }
+            
+
+            function sendAjax(url,data){
+                var id = JSON.stringify({'id' : data});
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST',url);
+                xhr.setRequestHeader('Content-Type','application/json');
+                xhr.send(id);
+
+                xhr.addEventListener("load",function(){
+                    var getData = JSON.parse(xhr.responseText);
+                    var resultDiv = document.querySelector('#idCheck')
+                    //이미 아이디가 있음
+                    if (getData.result === "OK"){
+                        resultDiv.style.color = 'red';
+                        resultDiv.innerHTML = "아이디가 이미 존재합니다. ";
+                    }
+                    else {
+                        
+                        resultDiv.style.color = 'blue';
+                        resultDiv.innerHTML = "사용가능한 아이디입니다.";
+
+
+                    }
+                })
+
+
+
+            }
+        })
+        document.querySelector("#inputName").addEventListener("keyup",function(){
+            var inputData = document.getElementById("inputName").value;
+            if (inputData.length < 2 ){
+                var resultDiv = document.querySelector('#nameCheck')
+                resultDiv.style.color  = 'red';
+                resultDiv.innerHTML = "닉네임이 너무 짧습니다. 2글자 이상으로 지정해 주세요 " ;
+            }
+            else{
+                sendAjax("http://localhost:3000/check/name",inputData);
+            }
+            
+
+
+
+            function sendAjax(url,data){
+                var name = JSON.stringify({'name' : data});
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST',url);
+                xhr.setRequestHeader('Content-Type','application/json');
+                xhr.send(name);
+
+                xhr.addEventListener("load",function(){
+                    var getData = JSON.parse(xhr.responseText);
+                    var resultDiv = document.querySelector('#nameCheck')
+                    //이미 닉네임이 있센
+
+                    if (getData.result === "OK"){
+                        resultDiv.style.color  = 'red';
+                        resultDiv.innerHTML = "닉네임가 이미 존재합니다. " ;
+                    }
+                    else {
+                        resultDiv.style.color = 'blue';
+                        resultDiv.innerHTML = "사용가능한 닉네임입니다.";
+                        }
+
+                    
+                })
+
+
+            }
+        })
+
+
     </script>
 </body>
 

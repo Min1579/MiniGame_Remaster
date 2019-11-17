@@ -7,6 +7,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 
 const userList = [];
+
 io.on('connection', function(socket) {
     
   
@@ -86,20 +87,23 @@ io.on('connection', function(socket) {
   
 
 //routing
-const indexRouter = require('./router/index');
-const gameRouter = require('./router/game');
-
-
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(bodyParser.json());
-app.use(express.static('public'));
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname,'views'));
-
-app.use('/game', gameRouter);
-app.use('/',indexRouter);
 
 server.listen(3000, () => {
     console.log('server started!');
 });
+
+const ajaxRouter = require('./router/ajax')
+const indexRouter = require('./router/index');
+const gameRouter = require('./router/game');
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname,'views'));
+
+
+app.use(express.static('public'));
+
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
+app.use('/check',ajaxRouter)
+app.use('/game', gameRouter);
+app.use('/',indexRouter);
