@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MiniGames</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script defer src="/javascript/socket/catchMyMind/script.js"></script>
+</head>
+
+<body>
+    <header>
+        <% include ../header %>
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <h3>Online User List</h3>
+                <ul class="list-group" id="user-group">
+                </ul>
+
+            </div>
+            <div class="col-md-9">
+                <h1>Waiting Room</h1>
+                <div class="jumbotron">
+
+                </div>
+
+                <div id="message-container"></div>
+                <form id="send-container">
+                    <label for="message-input">>></label>
+                    <input type="text" id="message-input" width="100%">
+                    <button type="submit" id="send-button">Send</button>
+                </form>
+
+
+            </div>
+        </div>
+        <%  include ../footer %>
+    </div>
+
+</body>
+
+</html>

@@ -6,26 +6,26 @@ const connection = require('../database/db');
 const bodyParser = require('body-parser');
 
 router.get('/mypage', (req,res) => {
-    res.render('mypage');
+    res.render('mypage/mypage');
 })
 
 router.get('/board', (req,res) => {
-    res.render('board');
+    res.render('board/board');
 })
 
 router.get('/rank', (req,res) => {
-    res.render('rank');
+    res.render('rank/rank');
 });
 
 router.get('/login', (req,res) => {
-    res.render('login')
+    res.render('user/login')
 });
 
 router.get('/join', (req,res) => {
     console.log('get join url');
     const errMsg = req.flash('error');
     if (errMsg) {
-        res.render('join.ejs', {'message' : errMsg})
+        res.render('user/join', {'message' : errMsg})
     }
 })
 

@@ -11,97 +11,40 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 const flash = require('connect-flash');
-
-const userList = [];
-const room = {};
-
-io.on('connection', function(socket) {
-    
-  
-    // 접속한 클라이언트의 정보가 수신되면
-    socket.on('login', function(data) {
-      console.log('Client logged-in:\n name:' + data.name + 
-      '\n userid: ' + data.userid);
-      userList.push(data.name)
-      console.log(userList);
-      
-      // socket에 클라이언트 정보를 저장한다
-      socket.name = data.name;
-      socket.userid = data.userid;
-      socket.list = userList;
-      // 접속된 모든 클라이언트에게 메시지를 전송한다
-      io.emit('login', {name:data.name, list: userList} );
-    });
-  
-    // 클라이언트로부터의 메시지가 수신되면
-    socket.on('chat', function(data) {
-      console.log('Message from %s: %s', socket.name, data.msg);
-  
-      var msg = {
-        from: {
-          name: socket.name,
-          userid: socket.userid
-        },
-        msg: data.msg
-      };
-  
-      // 메시지를 전송한 클라이언트를 제외한 모든 클라이언트에게 메시지를 전송한다
-      socket.broadcast.emit('chat', msg);
-  
-      // 메시지를 전송한 클라이언트에게만 메시지를 전송한다
-      // socket.emit('s2c chat', msg);
-  
-      // 접속된 모든 클라이언트에게 메시지를 전송한다
-     io.emit('s2c chat', msg);
-  
-      // 특정 클라이언트에게만 메시지를 전송한다
-      // io.to(id).emit('s2c chat', data);
-    });
-  
-    // force client disconnect from server
-    socket.on('forceDisconnect', function() {
-      socket.disconnect();
-    })
-  
-    socket.on('disconnect', function() {
-      console.log('user disconnected: ' + socket.name);
-        for (name in userList) {
-          if (name == socket.name) delete name;
-        } 
-    });
-
-    socket.on('update', () =>{
-      const list = JSON.stringify(userList);
-      console.log(list)
-      io.emit('update', list);
-    })
-  });
-
-  //room 설정
-  const chat = io.of('/chat').on('connection', function(socket) {
-    socket.on('chat message', function(data){
-      console.log('message from client: ', data);
-  
-      var name = socket.name = data.name;
-      var room = socket.room = data.room;
-  
-      // room에 join한다
-      socket.join(room);
-      // room에 join되어 있는 클라이언트에게 메시지를 전송한다
-      chat.to(room).emit('chat message', data.msg);
-    });
-  });
-  
-
  
+
+const users = {}
+const userList = [];
+
+io.on('connection', socket => {
+  socket.on('new-user', name => {
+    users[socket.id] = name
+    userList.push(name);
+    console.log(userList);
+    
+    
+    io.emit('user-connected', {name:name, userList:userList});
+    
+  })
+  socket.on('send-chat-message', message => {
+    socket.broadcast.emit('chat-message', { message: message, name: users[socket.id] })
+  })
+  socket.on('disconnect', () => {
+    socket.broadcast.emit('user-disconnected', users[socket.id])
+    
+    delete users[socket.id]
+  })
+})
 
 server.listen(3000, () => {
     console.log('server started!');
 });
 
+module.exports = io;
+
 const ajaxRouter = require('./router/ajax')
 const indexRouter = require('./router/index');
-const gameRouter = require('./router/game');
+const catchMyMindRouter = require('./router/catchMyMind/catchMyMind');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname,'views'));
@@ -123,7 +66,7 @@ app.use(passport.session());
 app.use(flash());
 
 app.use('/check',ajaxRouter)
-app.use('/game', gameRouter);
+app.use('/catchMyMind', catchMyMindRouter);
 app.use('/',indexRouter);
 
 module.exports = server;

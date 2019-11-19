@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 
-router.get('/1', (req,res) => {
-    res.render('catchmymind/');
+router.get('/', (req,res) => {
+    res.render('game01/main');
 });
 
 
