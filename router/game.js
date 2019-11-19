@@ -7,9 +7,12 @@ router.get('/1', (req,res) => {
 });
 
 router.get('/', (req,res) => {
-    res.render('waitingroom')
-})
+    res.render('waitingroom/index', {rooms: rooms});
+});
 
+router.get('/:room', (req,res) => {
+    res.render('room', {roomName: req.params.room});
+});
 
 
 module.exports = router;

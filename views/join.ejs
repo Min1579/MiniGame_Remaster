@@ -24,26 +24,27 @@
     </header>
     <br>
     <div class="container">
+        <section class="message"> <%= message %></section>
         <div class="jumbotron">
-            <form class="form-horizontal">
+            <form class="form-horizontal" action="/join" method="POST">
                 <div class="form-group">
                     <label for="inputID" class="col-sm-2 control-label">ID</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputID" placeholder="아이디를 입력하세요.">
+                        <input type="text" class="form-control" id="inputID" name="email" placeholder="아이디를 입력하세요.">
                         <div id="idCheck"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputName" class="col-sm-2 control-label">USER NAME</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputName" placeholder="게임내에서 사용할 이름을 입력하세요.">
+                        <input type="text" class="form-control" id="inputName" name="name" placeholder="게임내에서 사용할 이름을 입력하세요.">
                         <div id="nameCheck"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword" class="col-sm-2 control-label">PASSWORD</label>
                     <div class="col-sm-10">
-                        <input type="password" class="form-control" id="inputPassword" placeholder="비밀번호를 입력하세요">
+                        <input type="password" class="form-control" id="inputPassword" name="password" placeholder="비밀번호를 입력하세요">
                     </div>
                 </div>
                 <div class="form-group">
@@ -81,7 +82,7 @@
                 result.innerHTML = '사용가능한 비밀번호 입니다.'
             }
         })
-        document.querySelector("#inputID").addEventListener("keyup",function(){
+        document.querySelector("#inputID").addEventListener('keyup',function(){
             var inputData= document.getElementById("inputID").value;
             if (inputData.length<6){
                 var resultDiv = document.querySelector('#idCheck')
@@ -113,13 +114,8 @@
                         
                         resultDiv.style.color = 'blue';
                         resultDiv.innerHTML = "사용가능한 아이디입니다.";
-
-
                     }
                 })
-
-
-
             }
         })
         document.querySelector("#inputName").addEventListener("keyup",function(){
@@ -132,10 +128,7 @@
             else{
                 sendAjax("http://localhost:3000/check/name",inputData);
             }
-            
-
-
-
+        
             function sendAjax(url,data){
                 var name = JSON.stringify({'name' : data});
                 var xhr = new XMLHttpRequest();
@@ -146,7 +139,7 @@
                 xhr.addEventListener("load",function(){
                     var getData = JSON.parse(xhr.responseText);
                     var resultDiv = document.querySelector('#nameCheck')
-                    //이미 닉네임이 있센
+                    //이미 닉네임이 있음
 
                     if (getData.result === "OK"){
                         resultDiv.style.color  = 'red';
@@ -155,12 +148,8 @@
                     else {
                         resultDiv.style.color = 'blue';
                         resultDiv.innerHTML = "사용가능한 닉네임입니다.";
-                        }
-
-                    
+                        }  
                 })
-
-
             }
         })
 

@@ -1,12 +1,19 @@
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server)
+const io = require('socket.io')(server);
 
 const path = require('path');
 const bodyParser = require('body-parser');
 
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const session = require('express-session');
+const flash = require('connect-flash');
+
 const userList = [];
+const room = {};
 
 io.on('connection', function(socket) {
     
@@ -86,7 +93,7 @@ io.on('connection', function(socket) {
   });
   
 
-//routing
+ 
 
 server.listen(3000, () => {
     console.log('server started!');
@@ -104,6 +111,19 @@ app.use(express.static('public'));
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
 app.use('/check',ajaxRouter)
 app.use('/game', gameRouter);
 app.use('/',indexRouter);
+
+module.exports = server;
