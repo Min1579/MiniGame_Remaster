@@ -28,7 +28,23 @@
             <div class="col-md-9">
                 <h1>Waiting Room</h1>
                 <div class="jumbotron">
-
+                    <div class="row featurette">
+                        <div>
+                            <h2 class="featurette-heading">Catch My Mind <span class="text-muted"><%= %> </span></h2>
+                            <p class="lead">Game Rules</p>
+                            <ul>
+                                <li>그림을 그리고 싶으면 방을 생성을 합니다</li>
+                                <li>방장이 게임을 시작하면 게임이 진행이 됩니다</li>
+                                <li>게임에 참가하고 싶으면 생성된 방에 참가를 합니다.</li>
+                            </ul>
+                            <form action="#">
+                                <label for="input-title"></label>
+                                <input type="text" id="input-title" name="title" placeholder="방제목을 입력해주세요" required>
+                                &nbsp;&nbsp;&nbsp;
+                                <button type="sibmit" class="btn btn-default btn-primary" >생성하기</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="message-container"></div>
@@ -38,12 +54,22 @@
                     <button type="submit" id="send-button">Send</button>
                 </form>
 
+                <hr>
 
+                <table class="table">
+                    <thead>
+                        <th>#</th>
+                        <th>방제목</th>
+                        <th></th>
+                    </thead>
+                </table>
             </div>
         </div>
+        <br>
+    </div>
+    <div class="container">
         <%  include ../footer %>
     </div>
-
 </body>
 
 </html>

@@ -22,7 +22,6 @@ io.on('connection', socket => {
     userList.push(name);
     console.log(userList);
     
-    
     io.emit('user-connected', {name:name, userList:userList});
     
   })
@@ -30,8 +29,12 @@ io.on('connection', socket => {
     socket.broadcast.emit('chat-message', { message: message, name: users[socket.id] })
   })
   socket.on('disconnect', () => {
-    socket.broadcast.emit('user-disconnected', users[socket.id])
+    userList.forEach(name => {
+      if (name === users[socket.id])  delete name;
+    });
+    socket.broadcast.emit('user-disconnected',{name:users[socket.id], userList:userList} );
     
+    socket.broadcast.emit()
     delete users[socket.id]
   })
 })

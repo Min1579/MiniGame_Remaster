@@ -16,15 +16,12 @@ socket.on('user-connected', data => {
   appendMessage(`${data.name} connected`)
   
   const list = document.querySelector('#user-group');
-  let result = ''  
   updateUserList(data.userList);
 });
 
-
-
-
-socket.on('user-disconnected', name => {
-  appendMessage(`${name} disconnected`)
+socket.on('user-disconnected', data => {
+  appendMessage(`${data.name} disconnected`);
+  updateUserList(data.userList);
 })
 
 function updateUserList(users) {
