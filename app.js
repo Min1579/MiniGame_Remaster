@@ -48,6 +48,7 @@ module.exports = io;
 const ajaxRouter = require('./router/ajax')
 const indexRouter = require('./router/index');
 const catchMyMindRouter = require('./router/catchMyMind/catchMyMind');
+const dodgeRouter = require('./router/dodge/dodge');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname,'views'));
@@ -70,6 +71,7 @@ app.use(flash());
 
 app.use('/check',ajaxRouter)
 app.use('/catchMyMind', catchMyMindRouter);
+app.use('/dodge',dodgeRouter);
 app.use('/',indexRouter);
 
 module.exports = server;
