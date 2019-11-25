@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>MiniGames</title>
+  <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script defer src="javascripts/script.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+</head>
+
+<body>
+  <header>
+    <% include ../header %>
+  </header>
+  <div class="container">
+    <div class="jumbotron">
+      <form action="/room" method="POST">
+        <input name="room" type="text" required>
+        <button type="submit">New Room</button>
+      </form>
+    </div>
+    <table class="table">
+      <thead>
+        <th>#</th>
+        <th>방 제목</th>
+        <th>입장하기</th>
+      </thead>
+      <div id="room-container">
+        <% Object.keys(rooms).forEach((room,idx) => { %>
+        <tr>
+          <td><%= idx + 1 %></td>
+          <td><%= room %></td>
+          <td><a href="/<%= room %>">Join</a></td>
+        </tr>
+        <% }) %>
+      </div>
+    </table>
+    <footer>
+      <% include ../footer %>
+    </footer>
+  </div>
+
+
+</body>
+
+</html>

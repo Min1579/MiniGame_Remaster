@@ -1,0 +1,133 @@
+<!DOCTYPE html5>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Chat App</title>
+  <script>
+    const roomName = "<%= roomName %>"
+  </script>
+  <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script defer src="javascripts/script.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+</head>
+<style>
+#canvas {
+  border: 5px solid black;
+  border-radius: 50px 50px;
+}
+</style>
+<body>
+  <header>
+    <% include ../header %>
+  </header>
+  <br>
+  <div class="container">
+    <div>
+      <label for="selcolor">색상 : </label> 
+      <select id="selcolor">
+        <option value="black">검정</option>
+        <option value="red">빨강</option>
+        <option value="green">초록</option>
+        <option value="blue">파랑</option>
+        <option value="magenta">분홍</option>
+      </select>
+      <label for="selwidth"> 굵기 : </label>  
+      <select id="selwidth">
+        <option value="1">얇게</option>
+        <option value="3">중간</option>
+        <option value="5">굵게</option>
+      </select>
+      <input class="btn btn-default" type="button" id="clear" value="모두 지움">
+    </div>
+
+    <canvas id="canvas" width="1140" height="600"></canvas>
+    <br><br>
+    <div class="jumbotron">
+      <div id="message-container"></div>
+      <form id="send-container">
+        <input type="text" id="message-input">
+        <button type="submit" id="send-button">Send</button>
+      </form>
+    </div>
+
+    <footer>
+      <% include ../footer %>
+    </footer>
+  </div>
+  <script src="javascripts/sketch.js"></script>
+  <script>
+    let canvas;
+    let ctx;
+    let sx, sy;					// 현재 위치
+    let drawing = false;			// 현재 그리는 중인가?
+
+    window.onload = function () {
+      const canvas = document.getElementById("canvas");
+      if (canvas == null || canvas.getContext == null) return;
+      ctx = canvas.getContext("2d");
+      ctx.lineCap = "round";
+
+      // 현재 위치를 저장한다.
+      canvas.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        sx = canvasX(e.clientX);
+        sy = canvasY(e.clientY);
+        drawing = true;
+        socket.emit('mousedown', sx,sy,drawing );
+      })
+
+      // 현재 위치에서 새로 이동한 곳까지 선을 그린다.
+      canvas.addEventListener('mousemove', function(e) {
+        if (drawing) {
+          e.preventDefault();
+          ctx.beginPath();
+          ctx.moveTo(sx, sy);
+          sx = canvasX(e.clientX);
+          sy = canvasY(e.clientY);
+          ctx.lineTo(sx, sy);
+          ctx.stroke();
+          socket.emit('mousemove', sx,sy);
+        }
+      })
+
+      // 그리기를 종료한다.
+      canvas.addEventListener('mouseup', function(e) {
+        drawing = false;
+      })
+
+    // 선 색상 변경
+    const selcolor = document.getElementById("selcolor");
+    selcolor.addEventListener('change', function(e) {
+      ctx.strokeStyle = selcolor.value;
+    })
+
+    // 선 굵기 변경
+    const selwidth = document.getElementById("selwidth");
+    selwidth.addEventListener('change', function(e){
+      ctx.lineWidth = selwidth.value;
+    })
+
+    // 모두 지우기
+    const btnclear = document.getElementById("clear");
+    btnclear.addEventListener('click', function(e){
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    })
+    
+    function canvasX(clientX) {
+      const bound = canvas.getBoundingClientRect();
+      const bw = 5;
+      return (clientX - bound.left - bw) * (canvas.width / (bound.width - bw * 2));
+    }
+
+    function canvasY(clientY) {
+      const bound = canvas.getBoundingClientRect();
+      const bw = 5;
+      return (clientY - bound.top - bw) * (canvas.height / (bound.height - bw * 2));
+    }
+}
+  </script>
+</body>
+</html>
