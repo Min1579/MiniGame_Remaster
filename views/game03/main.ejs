@@ -7,16 +7,19 @@
     <title>Dodge</title>
 </head> 
 <body>
-  hello
-</body>
-<body onload="init();">
     <div align="center">
       <table>
-          <tr>
-              <td><h1 id="user"></h1></td>
-              <td><h1 id="ball"></h1></td> 
-              <td colspan="2"><h1 id="score"></h1></td>
-          </tr>
+        <tr>
+            <td colspan="2">      
+                <button onclick="init()">게임 시작</button>
+                <button onclick="location.href='./dodge'">재시작</button>
+            </td>
+        </tr>
+        <tr>
+          <td><h1 id="user"></h1></td>
+          <td><h1 id="ball"></h1></td> 
+          <td colspan="2"><h1 id="score"></h1></td>
+        </tr>
       </table>
       <canvas id="canvas" width="600" height="400"></canvas>
     </div>

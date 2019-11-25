@@ -1,12 +1,13 @@
+
+
 function init(){
-  var canvas = document.getElementById('canvas');
-  const name = prompt("input name..");
-  document.querySelector('#user').innerHTML = name;
-  var game = new Game(canvas);
+  var ctx = document.getElementById('canvas').getContext('2d');
+  ctx.fillRect(0,0,600,400);
+  var game = new Game();
 }
 
-function Game(canvas){
-
+function Game(){
+  var canvas = document.getElementById('canvas');
   var ballcnt = 1;
   var score = 0;
   var plane = new Plane(canvas);
@@ -51,6 +52,7 @@ function drawBall(canvas,plane){
           const xPos = plane.x;
           const yPos = plane.y;
           plane.imgPlane.src = "../image/dodge/boom.gif";
+          window.clearInterval(1);
           window.clearInterval(2);
           setInterval(function(){
             ctx.clearRect(0,0,600,400);
@@ -64,8 +66,13 @@ function drawBall(canvas,plane){
             const overImg = new Image();
             overImg.src = "../image/dodge/over.png";
             canvas.addEventListener("click",function(){
-              clearInterval(over);
+              for (var i =0; i < 500; i ++){
+                clearInterval(i);
+              }
+              delete overImg;
+              delete game;
               ctx.fillRect(0,0,600,400);
+              game = new Game();
             });
             var over = setInterval(function(){
               ctx.drawImage(overImg,150,100,300,200);
