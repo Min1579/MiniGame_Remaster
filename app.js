@@ -16,11 +16,14 @@ const registerRouter = require('./routes/register');
 const loginRouter = require('./routes/login');
 const rankBoardRouter = require('./routes/rankBoard');
 const userBoardRouter = require('./routes/board');
-const mypageRouter = require('./routes/mypage')
+const mypageRouter = require('./routes/mypage');
+const dodgeRouter = require('./routes/dodge/dodge');
+
 
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server); 
+
 
 server.listen(3000);
 // view engine setup
@@ -59,6 +62,7 @@ app.use('/board', userBoardRouter);
 app.use('/rank', rankBoardRouter)
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
+app.use('/dodge',dodgeRouter);
 app.use('/', indexRouter);
 
 
@@ -121,6 +125,7 @@ function getUserRooms(socket) {
   }, [])
 }
 /**    Socket end  */
+//dodge
 
 
 
