@@ -5,17 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dodge</title>
+    <style>
+    body{
+        text-align: center;
+    }
+    div{
+        margin: 0 auto;
+        width: 600px;
+        padding: 0;
+        background: #19acd3;
+    }
+    div.item{
+        padding: 8px 0px;
+        width: 200px;
+        float: left;
+    }
+    div.main{
+        background: linear-gradient(black,#19acd3,#7f2cc9);
+        border-radius: 10%;
+    }
+    h1#msg{
+        text-align: center;
+        padding-bottom: 10px;
+    }
+    button{
+        position: absolute;
+        left: 50%;
+        margin-left: -40px;
+        background: transparent;
+        border: 1 white;
+        color: white;
+        width: 80px;
+        height: 50px;
+    }
+    canvas{
+        background: black;
+    }
+    </style>
 </head> 
 <body>
-    <div align="center">
-      <table>
-        <tr>
-          <td><h1 id="user"><%= name %></h1></td>
-          <td><h1 id="ball" >level : </h1></td> 
-          <td colspan="2"><h1 id="score">score : </h1></td>
-        </tr>
-      </table>
-        <% include ./game.ejs%>
+    <div class="container">
+        <div class="item">User</div>
+        <div class="item">Level</div>
+        <div class="item">Score</div>
     </div>
+    <div class="container">
+        <div class="item" id="user"><%=name%></div>
+        <div class="item" id="ball">0</div>
+        <div class="item" id="score"">0</div>
+    </div>
+    <% include ./game.ejs%>
 </body>
 </html>

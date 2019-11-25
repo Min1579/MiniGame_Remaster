@@ -1,7 +1,9 @@
-
+window.onload = function(){
+  document.querySelector("#win-cvs")
+}
 
 function init(){
-  var ctx = document.querySelector('canvas').getContext('2d');
+  var ctx = document.querySelector('#canvas').getContext('2d');  
   document.querySelector('button').outerHTML = '';
   for (var i =0; i < 500; i ++){
     clearInterval(i);
@@ -12,7 +14,7 @@ function init(){
   cnt2.src = "../images/dodge/2-128.png";
   var cnt1 = new Image();
   cnt1.src = "../images/dodge/1-128.png";
-
+  
   setTimeout(function(){
     ctx.fillRect(0,0,600,400);
     ctx.drawImage(cnt3,225,125,150,150);
@@ -34,18 +36,8 @@ function init(){
   
 }
 
-function clearGame(){
-  var ctx = document.querySelector('canvas').getContext('2d');
-  for (var i =0; i < 500; i ++){
-    clearInterval(i);
-  }
-  delete overImg;
-  delete game;
-  ctx.fillRect(0,0,600,400);  
-}
-
 function Game(){
-  var canvas = document.getElementById('canvas');
+  var canvas = document.querySelector('#canvas')
   var ballcnt = 1;
   var score = 0;
   var plane = new Plane(canvas);
@@ -54,10 +46,10 @@ function Game(){
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0,0,600,400);
     score +=10;
-    output = "score : " + score +"<br>";
+    output = score;
     document.getElementById('score').innerHTML = output;
     var level = ((ballArr.length/10)+1);
-    document.getElementById('ball').innerHTML = "level : " + parseInt(level);
+    document.getElementById('ball').innerHTML = parseInt(level);
     ctx.fillRect(0,0,600,400);
   },50);
 
@@ -102,19 +94,39 @@ function drawBall(canvas,plane){
               clearInterval(i);
             }
             const overImg = new Image();
-            overImg.src = "../images/dodge/over.png";
-            overImg.addEventListener("click",function(){
-              for (var i =0; i < 500; i ++){
-                clearInterval(i);
-              }
-              delete overImg;
-              delete game;
-              ctx.fillRect(0,0,600,400);
-              game = new Game();
-            });
-            var over = setInterval(function(){
+            overImg.onload = function(){
               ctx.drawImage(overImg,150,100,300,200);
-            },1);
+            }
+            overImg.src = "../images/dodge/over.png";
+            var btn = document.createElement("button");
+            document.body.appendChild(btn);
+            document.querySelector('button').outerHTML = '<button style="top:55%;" onclick="init()">재시작</button>';
+
+            
+            const email = document.querySelector('#user').innerHTML;
+            
+            if (email ==="Guest"){
+              document.querySelector('#msg').innerHTML = "Please Login";
+            }
+            else {
+              const score = parseInt(document.querySelector('#score').innerText);
+              sendAjax("http://localhost:3000/ajax/score",email,score);
+            }
+
+
+            function sendAjax(url,email,score){
+              var data = JSON.stringify({'email':email , 'score':score});
+              var xhr = new XMLHttpRequest();
+              xhr.open('POST',url);
+              xhr.setRequestHeader("Content-Type","application/json");
+              xhr.send(data);
+
+              xhr.addEventListener("load",function(){
+                var getData = JSON.parse(xhr.responseText);
+                document.querySelector('#msg').innerHTML = getData.msg;
+              })
+
+            }
             
 
           },500);
