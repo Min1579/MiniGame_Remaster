@@ -5,55 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dodge</title>
-    <style>
-    body{
-        text-align: center;
-    }
-    div{
-        margin: 0 auto;
-        width: 600px;
-        padding: 0;
-        background: #19acd3;
-    }
-    div.item{
-        padding: 8px 0px;
-        width: 200px;
-        float: left;
-    }
-    div.main{
-        background: linear-gradient(black,#19acd3,#7f2cc9);
-        border-radius: 10%;
-    }
-    h1#msg{
-        text-align: center;
-        padding-bottom: 10px;
-    }
-    button{
-        position: absolute;
-        left: 50%;
-        margin-left: -40px;
-        background: transparent;
-        border: 1 white;
-        color: white;
-        width: 80px;
-        height: 50px;
-    }
-    canvas{
-        background: black;
-    }
-    </style>
+    <link rel="stylesheet" href="stylesheets/dodge.css"/>
 </head> 
 <body>
-    <div class="container">
-        <div class="item">User</div>
-        <div class="item">Level</div>
-        <div class="item">Score</div>
+    <div class="container" id="panel">
+        <div class="item font-bigger">User</div>
+        <div class="item font-bigger">Level</div>
+        <div class="item font-bigger">Score</div>
     </div>
     <div class="container">
         <div class="item" id="user"><%=name%></div>
         <div class="item" id="ball">0</div>
         <div class="item" id="score"">0</div>
     </div>
-    <% include ./game.ejs%>
+    <div class="main">    
+        <canvas id="canvas" width="600" height="400"></canvas>
+        <h1 id="msg">Enjoy!</h1>
+    </div>
+    <button style="top: 65%;" onclick="init()">Game <br> Start!</button>
+    <script src="/javascript/dodge.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
-window.onload = function(){
-  document.querySelector("#win-cvs")
-}
+// window.onload = function(){
+//   document.querySelector("#win-cvs")
+// }
 
 function init(){
   var ctx = document.querySelector('#canvas').getContext('2d');  
@@ -100,7 +100,7 @@ function drawBall(canvas,plane){
             overImg.src = "../images/dodge/over.png";
             var btn = document.createElement("button");
             document.body.appendChild(btn);
-            document.querySelector('button').outerHTML = '<button style="top:55%;" onclick="init()">재시작</button>';
+            document.querySelector('button').outerHTML = '<button style="top:65%;" onclick="init()">Restart?</button>';
 
             
             const email = document.querySelector('#user').innerHTML;
