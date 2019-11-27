@@ -35,20 +35,21 @@
             <thead>
                 <th style="width: 10%;">#</th>
                 <th style="width: 40%;">Title</th>
-                <th style="width: 20%">Writer</th>                
-                <td style="width: 20%">Post Date</td>
+                <th style="width: 20%">Writer</th>
+                <th style="width: 20%">Post Date</th>
                 <th style="width: 10%;">Views</th>
             </thead>
-
-            <% for (let i=0; i<20; i++) { %>
+            <% list.forEach(b => { %>
             <tr>
-                <td><%= i+1 %> </td>
-                <td><a href="#">테스트입니다</a></td>
-                <td>관리자</td>
-                <td>2019/xx/xx</td>
-                <td>0</td>
+                <td><%= b.no %></td>
+                <td><a href="/board/b?no=<%=b.no%>"> <%= b.title %> </a></td>
+                <td><%= b.writer %></td>
+                <td><%= b.postdate %></td>
+                <td><%= b.view%></td>
             </tr>
-            <% } %>
+            <% }) %>
+
+
         </table>
 
         <div class="text-center">
@@ -59,10 +60,10 @@
                 <li><a href="">4</a></li>
                 <li><a href="">5</a></li>
             </ul>
-            <a href="/board/register" class="btn btn-default" style="float: right;">글쓰기</a>
+            <a href="/board/register" class="btn btn-default pull-right">글쓰기</a>
         </div>
 
-        
+
         <% include ../footer %>
     </div>
 </body>

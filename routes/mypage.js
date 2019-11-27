@@ -2,16 +2,21 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../config/database');
 
+
+
 router.get('/', (req,res) => {
-    if(req.user === undefined) {
+    if(!req.user) {
         res.redirect('/login');
+    } else {
+        const query = connection.query('select email from user where name = ?', [req.user], (err, rows) => {
+            if(err) throw err;
+            res.render('mypage/main',{'email': rows[0].email, 'name':req.user});
+        })   
     }
-    const query = connection.query('select name from user where email = ?', [req.user], (err, rows) => {
-        if(err) throw err;
-        
-    })
-    console.log(req.user.email);
-    res.render('mypage/main',{'email':req.user});
+})
+
+router.post('/', (req,res) => {
+    
 })
 
 module.exports = router;

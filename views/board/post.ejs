@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <% include ../header %>
+    </header>
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+                <caption> POST </caption>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <th> TITLE </th>
+                    </th>
+                    <td><%= p.title %></td>
+                    <th> WRITER </th>
+                    <td><%= p.name %></td>
+                    <th> POST DATE</th>
+                    <td><%= p.postdate %></td>
+                </tr>
+                <tr>
+                    <th colspan="6">CONTENT </th>
+                </tr>
+                <tr  style="height: 300px;">
+                    <td colspan="6">
+                        <p>
+                            <%= p.content %>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <th> REPLY </th>
+                    <td colspan="4"><input type="text" placeholder="leave commnet..." class="form-control" name="pwd"></td>
+                    <td><button class="btn btn-default">submit</button></td>
+                </tr>
+
+
+            </tbody>
+        </table>
+
+        <% include ../footer %>
+    </div>
+
+
+</body>
+
+</html>

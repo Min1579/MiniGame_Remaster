@@ -27,16 +27,15 @@
     <div class="jumbotron">
         <form class="form-horizontal" action="/mypage/update" method="POST">
             <div class="form-group">
-                <label for="inputID" class="col-sm-2 control-label">ID</label>
+                <label for="userEmail" class="col-sm-2 control-label">EMAIL</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputID" name="email" placeholder="아이디를 입력하세요.">
-                    <div id="idCheck"><%= email %></div>
+                    <span id="userEmail" class="lead"> <%= email %></span>
                 </div>
             </div>
             <div class="form-group">
-                <label for="inputName" class="col-sm-2 control-label">USER NAME</label>
+                <label for="userName" class="col-sm-2 control-label">USER NAME</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputName" name="name" placeholder="게임내에서 사용할 이름을 입력하세요.">
+                    <span id="userName" class="lead"> <%= name %> </span>
                     <div id="nameCheck"></div>
                 </div>
             </div>
@@ -58,6 +57,7 @@
                 <div class="col-sm-offset-2 col-sm-10">
                     <button type="reset" class="btn btn-default btn-lg">Reset</button>
                     <button type="submit" class="btn btn-default btn-lg">UPDATE</button>
+                    <input type="hidden" name="email" value="<%=email%>">
                 </div>
             </div>
         </form>

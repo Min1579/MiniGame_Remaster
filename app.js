@@ -108,16 +108,32 @@ io.on('connection', socket => {
       delete rooms[room].users[socket.id]
     })
   })
-  socket.on('mousedown', (x,y,drawingt) => {
-    socket.to(room).broadcast.emit('mousedown', x,y,drawing);
+  /**
+   * Drawing EVENT
+   */
+  socket.on('send-mousemove', data => {
+    socket.broadcast.emit('receive-mousemove', data);
   })
-  socket.on('mousemove', (x,y) => {
-    socket.to(room).broadcast.emit('mousemove', x,y);
-  })
-  socket.on('mouseup', () => {
 
+  socket.on('send-mousedown', data => {
+    socket.broadcast.emit('receive-mousedown',data);
   })
-  //socket.on('change', () => {  })
+
+  socket.on('send-mouseup', data => {
+    socket.broadcast.emit('receive-mousedown', data);
+  })
+
+  socket.on('send-color', data => {
+    socket.broadcast.emit('receive-color',data);
+  })
+
+  socket.on('send-width', data => {
+    socket.broadcast.emit('receive-width', data);
+  })
+
+  socket.on('send-clear', data => {
+    socket.broadcast.emit('receive-clear', data);
+  }) 
 })
 
 function getUserRooms(socket) {

@@ -16,7 +16,6 @@ router.get('/', (req,res) => {
 passport.serializeUser((user, done) => {
     console.log('serialized');
     console.log('session saved');
-    console.dir(user);
     //done(null, user);
     done(null, user);
 });
@@ -46,7 +45,7 @@ passport.use('local-login', new LocalStrategy({
                 email: rows[0].email,
                 name: rows[0].name
             }
-            return done(null, user.email);
+            return done(null, user.name);
         } else {
             return done(null, false, {'message' : 'login information not matched!'});
             //message -> info 로 들어감
