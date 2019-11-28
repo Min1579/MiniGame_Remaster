@@ -1,14 +1,16 @@
-let canvas;
-let ctx;
-let sx, sy; // 현재 위치
-let drawing = false; // 현재 그리는 중인가?
-
-
 window.onload = function () {
+  let ctx;
+  let sx;
+  let sy;
+
+
+
   const socket = io('http://localhost:3000')
   const canvas = document.getElementById("canvas");
   if (canvas == null || canvas.getContext == null) return;
   ctx = canvas.getContext("2d");
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, 1140, 600);
   ctx.lineCap = "round";
 
   // 현재 위치를 저장한다.
@@ -18,11 +20,14 @@ window.onload = function () {
     sx = canvasX(e.clientX);
     sy = canvasY(e.clientY);
     drawing = true;
-    socket.emit('send-mousedown',{eX:e.clientX,eY:e.clientY})
-    
+    socket.emit('send-mousedown', {
+      eX: e.clientX,
+      eY: e.clientY
+    })
+
   })
 
-  socket.on('receive-mousedown',data =>{
+  socket.on('receive-mousedown', data => {
     canvas.addEventListener('mousedown', function (e) {
       console.log('mousedown');
       e.preventDefault();
@@ -32,10 +37,12 @@ window.onload = function () {
     })
   })
 
+
   // 현재 위치에서 새로 이동한 곳까지 선을 그린다.
   canvas.addEventListener('mousemove', function (e) {
     console.log('mousemove');
     if (drawing) {
+
       e.preventDefault();
       ctx.beginPath();
       ctx.moveTo(sx, sy);
@@ -43,33 +50,46 @@ window.onload = function () {
       sy = canvasY(e.clientY);
       ctx.lineTo(sx, sy);
       ctx.stroke();
-      console.log({x:sx,y:sy,eX:e.clientX,eY:e.clientY});
-      socket.emit('send-mousemove',{x:sx,y:sy,eX:e.clientX,eY:e.clientY});
+
+      console.log({
+        x: sx,
+        y: sy,
+        eX: e.clientX,
+        eY: e.clientY
+      });
+      socket.emit('send-mousemove', {
+        x: sx,
+        y: sy,
+        eX: e.clientX,
+        eY: e.clientY
+      });
       console.log('event occured');
-      
+
     }
   })
-
-  socket.on('receive-mousemove',data =>{
-    console.log(data);
+  function draw(evnet, data) {
+    event.preventDefault();
+    ctx.beginPath();
+    ctx.moveTo(data.x, data.y);
+    x = canvasX(data.eX);
+    y = canvasY(data.eY);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
+  socket.on('receive-mousemove', data => {
     
-    canvas.addEventListener('mousemove', function(e) {
-      console.log('event received');
-      e.preventDefault();
-      ctx.beginPath();
-      ctx.moveTo(data.x, data.y);
-      data.x = canvasX(data.eX);
-      data.y = canvasY(data.eY);
-      ctx.lineTo(data.x, data.y);
-      ctx.stroke();
-    })
+    console.log(data);
+    const event = canvas.trigger('mousemove');
+    draw(evnet, data)
   })
 
   // 그리기를 종료한다.
   canvas.addEventListener('mouseup', function (e) {
     console.log('mouseup');
     drawing = false;
-    socket.emit('send-mouseup', {bool: false});
+    socket.emit('send-mouseup', {
+      bool: false
+    });
   })
 
   socket.on('receive-mousedown', data => {
@@ -83,13 +103,15 @@ window.onload = function () {
   const selcolor = document.getElementById("selcolor");
   selcolor.addEventListener('change', function (e) {
     ctx.strokeStyle = selcolor.value;
-    socket.emit('send-color', {color: ctx.strokeStyle });
+    socket.emit('send-color', {
+      color: ctx.strokeStyle
+    });
   })
 
   socket.on('receive-color', data => {
     selcolor.addEventListener('change', function (e) {
-      console.log('color',data.color);
-      
+      console.log('color', data.color);
+
       ctx.strokeStyle = data.color;
     })
   })
@@ -98,24 +120,31 @@ window.onload = function () {
   const selwidth = document.getElementById("selwidth");
   selwidth.addEventListener('change', function (e) {
     ctx.lineWidth = selwidth.value;
-    socket.emit('send-width', {width: ctx.lineWidth});
+    socket.emit('send-width', {
+      width: ctx.lineWidth
+    });
   })
 
   socket.on('receive-width', data => {
     selwidth.addEventListener('change', function (e) {
       ctx.lineWidth = data.width;
-      })
+    })
   })
 
   // 모두 지우기
   const btnclear = document.getElementById("clear");
   btnclear.addEventListener('click', function (e) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    socket.emit('send-clear',{x:0,y:0,width:canvas.width,height:canvas.height});
+    socket.emit('send-clear', {
+      x: 0,
+      y: 0,
+      width: canvas.width,
+      height: canvas.height
+    });
   })
 
   socket.on('receive-clear', data => {
-    ctx.clearRect(data.x,data.y,data.width, data.height);
+    ctx.clearRect(data.x, data.y, data.width, data.height);
   })
 
 
@@ -132,6 +161,6 @@ window.onload = function () {
     return (clientY - bound.top - bw) * (canvas.height / (bound.height - bw * 2));
   }
 
-  
-  
+
+
 }
