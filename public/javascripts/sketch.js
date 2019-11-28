@@ -1,14 +1,16 @@
-let canvas;
-let ctx;
-let sx, sy; // 현재 위치
-let drawing = false; // 현재 그리는 중인가?
-
-
 window.onload = function () {
+  let ctx;
+  let sx;
+  let sy;
+
+
+
   const socket = io('http://localhost:3000')
   const canvas = document.getElementById("canvas");
   if (canvas == null || canvas.getContext == null) return;
   ctx = canvas.getContext("2d");
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, 1140, 600);
   ctx.lineCap = "round";
 
   // 현재 위치를 저장한다.
@@ -26,19 +28,20 @@ window.onload = function () {
   })
 
   socket.on('receive-mousedown', data => {
-    canvas.createEvent('mousedown', function (e) {
       console.log('mousedown');
       e.preventDefault();
       sx = canvasX(data.eX);
       sy = canvasY(data.eY);
       drawing = true;
     })
-  })
+  
+
 
   // 현재 위치에서 새로 이동한 곳까지 선을 그린다.
   canvas.addEventListener('mousemove', function (e) {
     console.log('mousemove');
     if (drawing) {
+
       e.preventDefault();
       ctx.beginPath();
       ctx.moveTo(sx, sy);
@@ -46,6 +49,7 @@ window.onload = function () {
       sy = canvasY(e.clientY);
       ctx.lineTo(sx, sy);
       ctx.stroke();
+
       console.log({
         x: sx,
         y: sy,
@@ -63,19 +67,20 @@ window.onload = function () {
     }
   })
 
+  function draw(evnet, data) {
+    event.preventDefault();
+    ctx.beginPath();
+    ctx.moveTo(data.x, data.y);
+    x = canvasX(data.eX);
+    y = canvasY(data.eY);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
   socket.on('receive-mousemove', data => {
+    
     console.log(data);
-
-    canvas.emitter('mousemove', function (e) {
-      console.log('event received');
-      e.preventDefault();
-      ctx.beginPath();
-      ctx.moveTo(data.x, data.y);
-      data.x = canvasX(data.eX);
-      data.y = canvasY(data.eY);
-      ctx.lineTo(data.x, data.y);
-      ctx.stroke();
-    })
+    const event = canvas.trigger('mousemove');
+    draw(evnet, data)
   })
 
   // 그리기를 종료한다.

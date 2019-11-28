@@ -53,12 +53,20 @@ router.post('/register', (req,res) =>{
 
 // 게시글 업데이트
 router.get('/update', (req,res) => {
-    
+    const query = req.query;
+    const title = query.title;
+    const content = query.content;
+    const postdate = query.postdate;
+    const name = query.name;
+
+    res.render('board/update', {title:title,content:content,postdate, name:name});
 });
 
 // 게시글 업데이트 완료
 router.post('/udpate', (req,res) => {
-
+    const body = req.body;
+    const title = body.title;
+    
 });
 
 router.get('/delete', (req,res) => {
@@ -82,6 +90,7 @@ router.get('/b',(req,res) => {
     const bQuery = connection.query('select * from board where no =?',[req.query.no], (err,rows) => {
         if(err) throw err;
         if(rows[0]) {
+            p.no = req.query.no;
             p.title = rows[0].title;
             p.name = rows[0].name;
             p.postdate = rows[0].postdate;

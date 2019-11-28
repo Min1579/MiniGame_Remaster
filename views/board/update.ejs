@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <% include ../header %>
+    </header>
+    <div class="container">
+        <form action="/board/udpate" method="POST">
+            <table class="table table-bordered">
+                <thead>
+                    <caption> POST </caption>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <th> TITLE </th>
+                        </th>
+                        <td><input name="title" type="text" value="<%=title%>"></td>
+                        <th> WRITER </th>
+                        <td><%= name %></td>
+                        <th> POST DATE</th>
+                        <td><%= postdate %></td>
+                    </tr>
+                    <tr>
+                        <th colspan="6">CONTENT </th>
+                    </tr>
+                    <tr style="height: 300px;">
+                        <td colspan="6">
+                            <p>
+                                <textarea name="content" cols="30" rows="10">
+                                <%= content %>
+                            </textarea>
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="hidden" name="name" value="<%=name%>">
+            <input type="hidden" name="postdate" value="<%=postdate%>">
+            <button type="submit" class="pull-right btn btn-default">UPDATE</button>
+        </form>
+        <br><br>
+        <% include ../footer %>
+    </div>
+
+
+</body>
+
+</html>
