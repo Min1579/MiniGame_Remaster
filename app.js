@@ -18,6 +18,7 @@ const rankBoardRouter = require('./routes/rankBoard');
 const userBoardRouter = require('./routes/board');
 const mypageRouter = require('./routes/mypage');
 const dodgeRouter = require('./routes/dodge/dodge');
+const desertRouter = require('./routes/desertwar/desertwar')
 const ajaxRouter = require('./routes/ajax');
 
 
@@ -64,6 +65,7 @@ app.use('/rank', rankBoardRouter)
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/dodge',dodgeRouter);
+app.use('/desertwar', desertRouter)
 app.use('/ajax',ajaxRouter);
 app.use('/', indexRouter);
 

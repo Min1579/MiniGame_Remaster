@@ -145,8 +145,8 @@ function drawPlane(plane) {
   document.addEventListener("keyup", keyUpHandler, false);
 
   if (canvas.getContext) {
-    plane.x < 1 ? plane.x = 2 : (plane.x > 580 ? plane.x = 579 : plane.x = plane.x + plane.xcnt);
-    plane.y < 1 ? plane.y = 2 : (plane.y > 380 ? plane.y = 379 : plane.y = plane.y + plane.ycnt);
+    plane.x < 20 ? plane.x = 20 : (plane.x > 580 ? plane.x = 580 : plane.x = plane.x + plane.xcnt);
+    plane.y < 20 ? plane.y = 20 : (plane.y > 380 ? plane.y = 380 : plane.y = plane.y + plane.ycnt);
   }
 
   function keyDownHandler(e) {
@@ -156,7 +156,7 @@ function drawPlane(plane) {
     else if (e.keyCode == 37) {
       plane.xcnt = -speed;
     }
-    else if (e.keyCode == 40) {
+    if (e.keyCode == 40) {
       plane.ycnt = speed;
     }
     else if (e.keyCode == 38) {
