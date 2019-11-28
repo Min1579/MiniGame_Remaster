@@ -43,7 +43,7 @@ h1#msg{
     border-radius:10px ;
     outline: none;
     font-size: 16px;
-    background: black;
+    background: #2c2c2c;
     
 }
 .game:active{
@@ -57,4 +57,8 @@ canvas{
 .font-bigger {
     font-size: 25px;
     font-weight: bold;
+}
+footer{
+    display: flex;
+    justify-content: center;
 }
