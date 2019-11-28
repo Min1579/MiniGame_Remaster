@@ -112,10 +112,10 @@ function drawBall(plane, ball) {
         }
         else {
           const score = parseInt(document.querySelector('#score').innerText);
-          sendAjax("http://localhost:3000/ajax/score", email, score);
+          sendAjax("http://localhost:3000/ajax/score", name, "테스트", score);
         }
-        function sendAjax(url, email, score) {
-          var data = JSON.stringify({ 'email': email, 'score': score });
+        function sendAjax(url, name, email, score) {
+          var data = JSON.stringify({'name':name,'email': email, 'score': score });
           var xhr = new XMLHttpRequest();
           xhr.open('POST', url);
           xhr.setRequestHeader("Content-Type", "application/json");

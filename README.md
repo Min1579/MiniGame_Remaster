@@ -20,3 +20,9 @@ create table board
     b_pwd    varchar(30) not null
 );
 
+//테스트 테이블
+create table dodge(
+    email    varchar(50) not null,
+    name     varchar(50) not null,
+    score    int not null
+);
