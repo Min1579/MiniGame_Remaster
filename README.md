@@ -20,3 +20,16 @@ create table board
     b_pwd    varchar(30) not null
 );
 
+-- auto-generated definition
+create table reply
+(
+    no        int auto_increment
+        primary key,
+    ref       int         not null,
+    r_content text        not null,
+    postdate  varchar(30) not null,
+    name      varchar(30) not null
+);
+
+
+
