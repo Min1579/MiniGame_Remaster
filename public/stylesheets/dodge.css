@@ -1,26 +1,24 @@
-body{
+.container-dodge-wrapper{
     text-align: center;
-    background-color: #e0d0fb;
-}
-div{
     margin: 0 auto;
     width: 600px;
-    padding: 0;    
+    padding: 0;   
 }
-.container{
-    border-radius: 10%;
-    background: #19acd3;
+.container-dodge{
+    clear: both;
 }
 .item{
     padding: 8px 0px;
     width: 200px;
     float: left;
+
 }
-.main{
-    background: linear-gradient(#19acd3,#7f2cc9);
-    border-radius: 10%;
-    margin-top: calc(50vh - 270px);
-    box-shadow: 5px 5px 5px rgba(0,0,0,0.5),-5px 5px 5px rgba(0,0,0,0.5);
+div.main{
+    background: linear-gradient(white,#7f2cc9);
+    border-bottom-left-radius: 5%;
+    border-bottom-right-radius: 5%;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+
 }
 h1#msg{
     text-align: center;
@@ -29,12 +27,9 @@ h1#msg{
     font-family: sans-serif;
     color: white;
 }
-button{
-    position: absolute;
-    left: 50%;
-    margin-left: -40px;
-    background: black;
+.main .game{
     color: white;
+    background: linear-gradient(#19acd3,#7f2cc9);
     width: 80px;
     height: 50px;
     cursor: pointer;
@@ -43,20 +38,21 @@ button{
     font-weight: bold;
     font-size: 15px;
 }
-button:hover{
+.game:hover{
     border: none;
     border-radius:10px ;
     outline: none;
     font-size: 16px;
-    background: linear-gradient(#19acd3,#7f2cc9);
+    background: black;
     
 }
-button:active{
+.game:active{
     transform: scale(0.97);
 }
 
 canvas{
     background: black;
+    z-index: 1;
 }
 .font-bigger {
     font-size: 25px;
