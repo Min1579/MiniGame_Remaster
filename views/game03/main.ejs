@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dodge</title>
+    <link rel="stylesheet" href="stylesheets/dodge.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+</head> 
+<body>
+    <% include ../header%>
+    <div class="container-dodge-wrapper" >
+        <div class="container-dodge">
+            <div class="item font-bigger">User</div>
+            <div class="item font-bigger">Level</div>
+            <div class="item font-bigger">Score</div>
+        </div>
+        <div class="container-dodge">
+            <div class="item" id="user"><%=name%></div>
+            <div class="item" id="ball">0</div>
+            <div class="item" id="score"">0</div>
+        </div>
+        <div class="main">    
+            <canvas id="canvas" width="600" height="400"></canvas>
+            <div style="background: transparent; margin-top: -10px; padding: 10px; height: 70px;" class="btn-wrapper">
+                <button onclick="init()" class="game"> Game <br/> Start!</button>
+            </div>
+            <h1 id="msg">Enjoy!</h1>
+        </div>
+        <% include ../footer%>
+    </div>
+
+    <script src="/javascript/dodge.js"></script>
+</body>
+
+</html>

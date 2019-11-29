@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <% include ../header %>
+    </header>
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+                <caption> POST </caption>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <th> TITLE </th>
+                    <td><%= p.title %></td>
+                    <th> WRITER </th>
+                    <td><%= p.name %></td>
+                    <th> POST DATE</th>
+                    <td><%= p.postdate %></td>
+                </tr>
+                <tr>
+                    <th colspan="6">CONTENT </th>
+                </tr>
+                <tr style="height: 300px;">
+                    <td colspan="6">
+                        <p>
+                            <%= p.content %>
+                        </p>
+                    </td>
+                </tr>
+                <form action="/board/post_reply" method="POST">
+                    <tr>
+                        <th> REPLY </th>
+                        <td colspan="4"><input type="text" placeholder="leave commnet..." class="form-control" name="r_content"></td>
+                        <input type="hidden" name="ref" value="<%=p.no%>">
+                        <td><button class="btn btn-default">SEND</button></td>
+                    </tr>
+                </form>
+                <% for (let i=0; i<replies.length; i++) { const r = replies[i]; %>
+                    <tr>
+                        <td><%= r.name %></td>
+                        <td><%= r.r_content %></td>
+                        <td><%= r.postdate %></td>
+                        <td><a href="#>">수정</a></td>
+                        <td><a href="/board/delete_reply?no=<%=r.no%>&name=<%=r.name%>&origin_no=<%=p.no%>">삭제</a></td>
+                    </tr>
+                <% } %>
+
+            </tbody>
+        </table>
+        <a class="pull-right btn btn-default"
+            href="/board/update?title=<%=p.title%>&content=<%=p.content%>&name=<%=p.name%>&postdate=<%=p.postdate%>">수정</a><a
+            class="pull-right btn btn-default" href="/board/delete">삭제</a>
+        <br><br>
+        <% include ../footer %>
+    </div>
+
+
+</body>
+
+</html>

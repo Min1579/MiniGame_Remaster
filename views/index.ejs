@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>MiniGames</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <% include ./header %>
+  </header>
+  <br>
+  <div class="container">
+    <div class="jumbotron">
+      <div class="row featurette">
+        <div class="col-md-7 col-md-push-5">
+          <h2 class="featurette-heading">Welcome! <%= user.name %> <span class="text-muted"></span></h2>
+          <p class="lead">You can play simple single game and multiplayer games with friends and others.
+            The game is currently under development and you can play it through the link of your favorite game below.
+            Thank you!</p>
+          <div>
+            <% if(user.name) { %>
+            <h3><a href="/logout" class="btn btn-default pull-right">LOGOUT</a></h3>
+            <%} else  {%>
+            <span class="text-muted">
+              <a href="/register" class="btn btn-default pull-right">JOIN US!</a></span>
+            <span>
+              <a href="/login" class="btn btn-default pull-right">LOGIN</a>
+            </span>
+
+            <% } %>
+
+          </div>
+
+        </div>
+        <div class="col-md-5 col-md-pull-7">
+          <img class="featurette-image img-responsive center-block" src="/images/main.png">
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-lg-4">
+        <img class="img-circle" src="/images/catchmymind.png" width="140" height="140">
+        <h2>CATCH MY MIND</h2>
+        <p>
+          <strong>CATCH MY MIND</strong> is a multiplayer game that you can play with others. Let others match your
+          creative picture.
+          And then meet other users' creative stuff too.</p>
+        <p><strong>DEVELOPED BY MIN</strong></p>
+        <p><a href="/cmm?name=<%=user.name%>" class="btn btn-primary btn-lg active" role="button">Play »</a></p>
+      </div><!-- /.col-lg-4 -->
+      <div class="col-lg-4">
+        <img class="img-circle" src="http://placehold.it/140x140" width="140" height="140">
+        <h2>Game2</h2>
+        <p>THIS GAME IS ON PROCESS OF IMPLEMENT. COMING SOON~</p>
+        <p><strong>BEING DEVELOPED BY MOON HYUN</strong></p>
+        <p><a href="#" class="btn btn-primary btn-lg active" role="button">Play »</a></p>
+        <p><a href="/desertwar" class="btn btn-primary btn-lg active" role="button">Play »</a></p>
+      </div><!-- /.col-lg-4 -->
+      <div class="col-lg-4">
+        <img class="img-circle" src="/images/beastart.png" width="140" height="140">
+        <h2>혹성탈출</h2>
+        <p>THIS GAME IS ON PROCESS OF IMPLEMENT. COMING SOON~</p>
+        <p><strong>BEING DEVELOPED BY YOON </strong></p>
+        <p><a href="/dodge" class="btn btn-primary btn-lg active" role="button">Play »</a></p>
+      </div>
+    </div>
+    <br><br>
+    <!-- FOOTER -->
+    <%  include ./footer %>
+  </div>
+</body>
+<script>
+  document.querySelector('#login_ajax').addEventListener('click', () => {
+    const userEmail = document.querySelector('#userEmailInput').value;
+    const userPwd = document.querySelector('#userPwdInput').value;
+    sendAjax('http://localhost:3000/member/login', userEmail, userPwd);
+  })
+
+  function sendAjax(url, email, pwd) {
+    const userInfo = {
+      'email': email,
+      'pwd': pwd
+    };
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(userInfo));
+    xhr.addEventListener('load', function () {
+      const data = JSON.parse(xhr.responseText);
+      const resultDiv = document.querySelector('#result');
+      console.log('index', data);
+      if (data) resultDiv.innerHTML = 'welcome!';
+      else resultDiv.innerHTML = data.email
+    })
+  }
+</script>
+
+</html>

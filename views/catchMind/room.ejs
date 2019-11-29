@@ -1,0 +1,62 @@
+<!DOCTYPE html5>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Chat App</title>
+  <script>
+    const roomName = "<%= roomName %>"
+  </script>
+  <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script defer src="javascripts/script.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <script defer src="javascripts/sketch.js"></script>
+</head>
+<style>
+#canvas {
+  border: 5px solid black;
+  border-radius: 50px 50px;
+}
+</style>
+<body>
+  <header>
+    <% include ../header %>
+  </header>
+  <br>
+  <div class="container">
+    <div>
+      <label for="selcolor">색상 : </label> 
+      <select id="selcolor">
+        <option value="black">검정</option>
+        <option value="red">빨강</option>
+        <option value="green">초록</option>
+        <option value="blue">파랑</option>
+        <option value="magenta">분홍</option>
+      </select>
+      <label for="selwidth"> 굵기 : </label>  
+      <select id="selwidth">
+        <option value="5">얇게</option>
+        <option value="10">중간</option>
+        <option value="15">굵게</option>
+      </select>
+      <input class="btn btn-default" type="button" id="clear" value="모두 지움">
+    </div>
+
+    <canvas id="canvas" width="1140" height="600"></canvas>
+    <br><br>
+    <div class="jumbotron">
+      <div id="message-container"></div>
+      <form id="send-container">
+        <input type="text" id="message-input">
+        <button type="submit" id="send-button">Send</button>
+      </form>
+    </div>
+
+    <footer>
+      <% include ../footer %>
+    </footer>
+  </div>
+</body>
+</html>

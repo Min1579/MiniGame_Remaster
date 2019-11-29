@@ -1,0 +1,27 @@
+{
+  "name": "minigames",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.7",
+    "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "express-session": "^1.17.0",
+    "html2canvas": "^1.0.0-rc.5",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "mysql2": "^2.0.1",
+    "nodemon": "^2.0.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "socket.io": "^2.3.0"
+  }
+}
