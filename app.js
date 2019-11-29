@@ -26,8 +26,6 @@ const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
 
-
-server.listen(3000);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -126,13 +124,28 @@ io.on('connection', socket => {
    */
 
   socket.on('send-mousemove', (room, x, y) => {
-    socket.to(room).broadcast.emit('get-mousemove', x,y,e);
+    socket.to(room).broadcast.emit('receive-mousemove', x, y);
   })
+  socket.on('send-color', (room, color) => {
+    socket.to(room).broadcast.emit('receive-color', color);
+  })
+  socket.on('send-width', (room, width) => {
+    socket.to(room).broadcast.emit('receive-width', width);
+  })
+  socket.on('send-clear', (room, w, h) => {
+    socket.to(room).broadcast.emit('receive-clear', w, h);
+  })
+  /*
   socket.on('send-mousedown',(room,x,y,drawing) =>{
-    socket.to(room).broadcast.emit('get-mousedown', x,y,drawing);
+    socket.to(room).broadcast.emit('receive-mousedown', x,y,drawing);
   })
   socket.on('send-mouseup',(room,drawing) => {
-    socket.to(room).broadcast.emit('get-mouseup',drawing);
+    socket.to(room).broadcast.emit('receive-mouseup',drawing);
+  })
+  */
+  socket.on('game-start', room => {
+    socket.to(room).broadcast.emit('prevnet-pointer');
+    io.to(room).emit('reset-canvas');
   })
 })
 
@@ -163,4 +176,6 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
+
+server.listen(3000);
 module.exports = app;
