@@ -23,7 +23,6 @@
         width: 1500px;
         height: 700px;
     }
-    
     </style>
     
 </head>
@@ -31,11 +30,7 @@
     <% include ../header%>
     <div style="display: flex; justify-content: center;">
     <canvas id="myCanvas" width="1500" height="700" >
-
     </canvas></div>
-    
-    
-
     <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
@@ -43,15 +38,10 @@
         var stopMove = 0;
         var enemyDie = false;
         var pilotDie = false;
-
         var enemycount = 0;
         // 배경 이미지의 x 좌표
         var back1X=0;
         var back2X =-1500;
-        // 스타트 이미지 로딩
-        var startimg = new Image();
-        startimg.src = "../images/desertwar/startimg.png";
-        ctx.drawImage(startimg,0,0,1500,700);
 
         // 죽는 이미지 로딩
         var dieImg = new Image();
@@ -70,7 +60,6 @@
         // 출력할 비행기의 이미지 인덱스
         var pilotIndex=1;
         
-
         // 비행기의 좌표
         var unitX = 100;
         var unitY = 350;
@@ -141,6 +130,7 @@
     document.getElementById("start_btn").onclick = function () {
            init();
         }
+        
     function init(){
         var intervalID = setInterval(function(){
             count++;
@@ -368,7 +358,7 @@
     }
     </script>
     <div id="btn_group">
-        <button id="start_btn" onclick="init()">START</button>
+        <button id="start_btn" style="display: block;" onclick="init()" >START</button>
     </div>
     <% include ../footer%>
 </body>
