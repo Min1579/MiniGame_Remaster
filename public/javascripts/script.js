@@ -5,7 +5,7 @@ const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
 
 if (messageForm != null) {
-  const name = prompt('your name?')
+  const name = prompt('your name?') 
   appendMessage(`${name} 님이 입장`)
   socket.emit('new-user', roomName, name)
 
@@ -22,7 +22,7 @@ socket.on('room-created', room => {
   const roomElement = document.createElement('div')
   roomElement.innerText = room
   const roomLink = document.createElement('a')
-  roomLink.href = `${room}`
+  roomLink.href = `/${room}`
   roomLink.innerText = 'join'
   roomContainer.append(roomElement)
   roomContainer.append(roomLink)

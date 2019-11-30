@@ -80,4 +80,31 @@
     <%  include ./footer %>
   </div>
 </body>
+
+<script>
+  // document.querySelector('#login_ajax').addEventListener('click', () => {
+  //   const userEmail = document.querySelector('#userEmailInput').value;
+  //   const userPwd = document.querySelector('#userPwdInput').value;
+  //   sendAjax('http://localhost:3000/member/login', userEmail, userPwd);
+  // })
+
+  // function sendAjax(url, email, pwd) {
+  //   const userInfo = {
+  //     'email': email,
+  //     'pwd': pwd
+  //   };
+  //   const xhr = new XMLHttpRequest();
+  //   xhr.open('POST', url);
+  //   xhr.setRequestHeader('Content-Type', 'application/json');
+  //   xhr.send(JSON.stringify(userInfo));
+  //   xhr.addEventListener('load', function () {
+  //     const data = JSON.parse(xhr.responseText);
+  //     const resultDiv = document.querySelector('#result');
+  //     console.log('index', data);
+  //     if (data) resultDiv.innerHTML = 'welcome!';
+  //     else resultDiv.innerHTML = data.email
+  //   })
+  // }
+</script>
+
 </html>
