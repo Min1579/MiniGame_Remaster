@@ -25,6 +25,8 @@ const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
 
+
+server.listen(3000);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -177,5 +179,5 @@ app.use((err, req, res, next) => {
 });
 
 
-server.listen(3000);
+
 module.exports = app;
