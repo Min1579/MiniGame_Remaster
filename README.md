@@ -5,7 +5,6 @@ create table user (
     comment text null
 );
 
-
 -- auto-generated definition
 create table board
 (
