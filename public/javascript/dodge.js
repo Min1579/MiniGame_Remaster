@@ -178,6 +178,8 @@ function drawBall(plane, ball) {
             document.querySelector('#msg').innerHTML = "Try again";
           }
         }
+
+
       }, 500);
     }
   }
@@ -220,6 +222,7 @@ function insertScore(url, email, name, score) {
   xhr.addEventListener("load", function () {
     var getData = JSON.parse(xhr.responseText);
     document.querySelector('#msg').innerHTML = getData.msg;
+    document.querySelector('#highScore').innerHTML = score;
   })
 }
 
@@ -233,6 +236,7 @@ function updateScore(url, email, score) {
   xhr.addEventListener("load", function () {
     var getData = JSON.parse(xhr.responseText);
     document.querySelector('#msg').innerHTML = getData.msg;
+    document.querySelector('#highScore').innerHTML = score;
   })
 }
 

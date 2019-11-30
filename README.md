@@ -17,7 +17,7 @@ create table board
     content  text        not null,
     postdate varchar(30) not null,
     view     int         not null,
-    b_pwd    varchar(30) not null
+    b_pwd    varchar(30) not null,
     foreign key(email) references user(email) 
     on delete cascade
 );
