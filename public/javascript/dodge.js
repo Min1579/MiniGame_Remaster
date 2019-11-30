@@ -22,6 +22,9 @@ boomImg.src = "../images/dodge/boom.gif";
 var ballArr = [];
 
 function init() {
+  const name = document.querySelector('#user').innerHTML;
+  getScore('http://localhost:3000/dodge/getScore',name);
+  getEmail('http://localhost:3000/dodge/getEmail',name);
   imgPlane.src = "../images/dodge/plane.png"
   document.querySelector('#msg').innerHTML = 'Enjoy!'
   ctx.clearRect(0, 0, 600, 400);
@@ -66,69 +69,6 @@ function Game() {
       drawBall(plane, ballArr[i]);
     }
   }, 20);
-}
-function Ball() {
-  this.x = Math.random() * 250;;
-  this.y = Math.random() * 150;;
-  this.xcnt = Math.random() * 1 + 5;
-  this.ycnt = Math.random() * 1 + 5;
-}
-
-function drawBall(plane, ball) {
-  if (canvas.getContext) {
-    ctx.drawImage(imgBall, ball.x - 10, ball.y - 10, 10, 10);
-    ball.x += ball.xcnt;
-    ball.y += ball.ycnt;
-    if (ball.x < 1 || ball.x > 590) {
-      ball.xcnt = -ball.xcnt
-    }
-    if (ball.y < 1 || ball.y > 390) {
-      ball.ycnt = -ball.ycnt
-    }
-    if (Math.abs(plane.x - ball.x) < 10 && Math.abs(plane.y - ball.y) < 10) {
-      const bx = plane.x;
-      const by = plane.y;
-      imgPlane.src = '';
-      setInterval(() => {
-        var i = 4
-        ctx.drawImage(boomImg, bx - 20 + i, by - 20, 40 + i, 40);
-        ctx.drawImage(boomImg, bx - 20, by - 20 + i, 40, 40 + i);
-        ctx.drawImage(boomImg, bx - 20 - i, by - 20, 40 - i, 40);
-        ctx.drawImage(boomImg, bx - 20, by - 20 + i, 40, 40 + i);
-
-      }, 10);
-      setTimeout(function () {
-        for (var i = 0; i < 500; i++) {
-          clearInterval(i);
-        }
-        ctx.drawImage(overImg, 150, 100, 300, 200);
-        var btn = document.createElement("button");
-        document.querySelector('.btn-wrapper').appendChild(btn);
-        document.querySelector('button').outerHTML = '<button onclick="init()" class="game">Restart?</button>';
-        const email = document.querySelector('#user').innerHTML;
-
-        if (email === "Guest") {
-          document.querySelector('#msg').innerHTML = "Please Login";
-        }
-        else {
-          const score = parseInt(document.querySelector('#score').innerText);
-          sendAjax("http://localhost:3000/ajax/score", name, "테스트", score);
-        }
-        function sendAjax(url, name, email, score) {
-          var data = JSON.stringify({'name':name,'email': email, 'score': score });
-          var xhr = new XMLHttpRequest();
-          xhr.open('POST', url);
-          xhr.setRequestHeader("Content-Type", "application/json");
-          xhr.send(data);
-
-          xhr.addEventListener("load", function () {
-            var getData = JSON.parse(xhr.responseText);
-            document.querySelector('#msg').innerHTML = getData.msg;
-          })
-        }
-      }, 500);
-    }
-  }
 }
 
 function Plane() {
@@ -180,3 +120,119 @@ function drawPlane(plane) {
     }
   }
 }
+
+function Ball() {
+  this.x = Math.random() * 250;;
+  this.y = Math.random() * 150;;
+  this.xcnt = Math.random() * 1 + 5;
+  this.ycnt = Math.random() * 1 + 5;
+}
+
+function drawBall(plane, ball) {
+  if (canvas.getContext) {
+    ctx.drawImage(imgBall, ball.x - 10, ball.y - 10, 10, 10);
+    ball.x += ball.xcnt;
+    ball.y += ball.ycnt;
+    if (ball.x < 1 || ball.x > 590) {
+      ball.xcnt = -ball.xcnt
+    }
+    if (ball.y < 1 || ball.y > 390) {
+      ball.ycnt = -ball.ycnt
+    }
+    if (Math.abs(plane.x - ball.x) < 10 && Math.abs(plane.y - ball.y) < 10) {
+      const bx = plane.x;
+      const by = plane.y;
+      imgPlane.src = '';
+      setInterval(() => {
+        var i = 4
+        ctx.drawImage(boomImg, bx - 20 + i, by - 20, 40 + i, 40);
+        ctx.drawImage(boomImg, bx - 20, by - 20 + i, 40, 40 + i);
+        ctx.drawImage(boomImg, bx - 20 - i, by - 20, 40 - i, 40);
+        ctx.drawImage(boomImg, bx - 20, by - 20 + i, 40, 40 + i);
+
+      }, 10);
+      setTimeout(function () {
+        for (var i = 0; i < 500; i++) {
+          clearInterval(i);
+        }
+        ctx.drawImage(overImg, 150, 100, 300, 200);
+        var btn = document.createElement("button");
+        document.querySelector('.btn-wrapper').appendChild(btn);
+        document.querySelector('button').outerHTML = '<button onclick="init()" class="game">Restart?</button>';
+        const name = document.querySelector('#user').innerHTML;
+        const highScore = parseInt(document.querySelector('#highScore').innerText);
+        const score = parseInt(document.querySelector('#score').innerText);
+        const email = document.querySelector("#email").innerText;
+
+        if (name === "Guest") {
+          document.querySelector('#msg').innerHTML = "Please Login";
+        }
+        else {
+          if (highScore == 0){
+            insertScore("http://localhost:3000/dodge/insertScore",email, name, score);
+          }
+          else if (highScore < score){
+            updateScore("http://localhost:3000/dodge/updateScore",email, score);
+          }
+          else{
+            document.querySelector('#msg').innerHTML = "Try again";
+          }
+        }
+      }, 500);
+    }
+  }
+}
+
+
+function getScore(url,name){
+  var data = JSON.stringify({'name':name});
+  var xhr = new XMLHttpRequest(); 
+  xhr.open('POST', url);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(data);
+
+  xhr.addEventListener("load", function () {
+    var getData = JSON.parse(xhr.responseText);
+    document.querySelector('#highScore').innerHTML = getData.score;
+  })
+}
+
+function getEmail(url,name){
+  var data = JSON.stringify({'name':name});
+  var xhr = new XMLHttpRequest(); 
+  xhr.open('POST', url);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(data);
+
+  xhr.addEventListener("load", function () {
+    var getData = JSON.parse(xhr.responseText);
+    document.querySelector('#email').innerHTML = getData.email;
+  })
+}
+
+function insertScore(url, email, name, score) {
+  var data = JSON.stringify({'email':email, 'name': name, 'score': score});
+  var xhr = new XMLHttpRequest(); 
+  xhr.open('POST', url);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(data);
+
+  xhr.addEventListener("load", function () {
+    var getData = JSON.parse(xhr.responseText);
+    document.querySelector('#msg').innerHTML = getData.msg;
+  })
+}
+
+function updateScore(url, email, score) {
+  var data = JSON.stringify({'email':email, 'score': score});
+  var xhr = new XMLHttpRequest(); 
+  xhr.open('POST', url);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(data);
+
+  xhr.addEventListener("load", function () {
+    var getData = JSON.parse(xhr.responseText);
+    document.querySelector('#msg').innerHTML = getData.msg;
+  })
+}
+

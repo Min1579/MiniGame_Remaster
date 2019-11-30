@@ -19,15 +19,12 @@ const userBoardRouter = require('./routes/board');
 const mypageRouter = require('./routes/mypage');
 const dodgeRouter = require('./routes/dodge/dodge');
 const desertRouter = require('./routes/desertwar/desertwar')
-const ajaxRouter = require('./routes/ajax');
 
 
 const app = express();
 const server = http.createServer(app);
-const io = require('socket.io')(server); 
+const io = require('socket.io')(server);
 
-
-server.listen(3000);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -49,7 +46,9 @@ app.use(flash());
 app.use(logger('dev'));
 //body-parser
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 //cookie-parser
 app.use(cookieParser());
 //public folder 고정
@@ -64,24 +63,27 @@ app.use('/board', userBoardRouter);
 app.use('/rank', rankBoardRouter)
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
-app.use('/dodge',dodgeRouter);
+app.use('/dodge', dodgeRouter);
 app.use('/desertwar', desertRouter)
-app.use('/ajax',ajaxRouter);
 app.use('/', indexRouter);
 
 
 // socket control (Dont touch)
-const rooms = { }
+const rooms = {}
 
 app.get('/cmm', (req, res) => {
-  res.render('catchMind/main', { rooms: rooms })
+  res.render('catchMind/main', {
+    rooms: rooms
+  })
 })
 
 app.post('/room', (req, res) => {
   if (rooms[req.body.room] != null) {
     return res.redirect('/cmm')
   }
-  rooms[req.body.room] = { users: {} }
+  rooms[req.body.room] = {
+    users: {}
+  }
   res.redirect(req.body.room)
   // Send message that new room was created
   io.emit('room-created', req.body.room)
@@ -91,7 +93,9 @@ app.get('/:room', (req, res) => {
   if (rooms[req.params.room] == null) {
     return res.redirect('/cmm')
   }
-  res.render('catchMind/room', { roomName: req.params.room })
+  res.render('catchMind/room', {
+    roomName: req.params.room
+  })
 })
 
 io.on('connection', socket => {
@@ -102,7 +106,10 @@ io.on('connection', socket => {
     socket.to(room).broadcast.emit('user-connected', name)
   })
   socket.on('send-chat-message', (room, message) => {
-    socket.to(room).broadcast.emit('chat-message', { message: message, name: rooms[room].users[socket.id] })
+    socket.to(room).broadcast.emit('chat-message', {
+      message: message,
+      name: rooms[room].users[socket.id]
+    })
   })
   socket.on('disconnect', () => {
     getUserRooms(socket).forEach(room => {
@@ -113,29 +120,31 @@ io.on('connection', socket => {
   /**
    * Drawing EVENT
    */
-  socket.on('send-mousemove', data => {
-    socket.broadcast.emit('receive-mousemove', data);
-  })
 
-  socket.on('send-mousedown', data => {
-    socket.broadcast.emit('receive-mousedown',data);
+  socket.on('send-mousemove', (room, x, y) => {
+    socket.to(room).broadcast.emit('receive-mousemove', x, y);
   })
-
-  socket.on('send-mouseup', data => {
-    socket.broadcast.emit('receive-mousedown', data);
+  socket.on('send-color', (room, color) => {
+    socket.to(room).broadcast.emit('receive-color', color);
   })
-
-  socket.on('send-color', data => {
-    socket.broadcast.emit('receive-color',data);
+  socket.on('send-width', (room, width) => {
+    socket.to(room).broadcast.emit('receive-width', width);
   })
-
-  socket.on('send-width', data => {
-    socket.broadcast.emit('receive-width', data);
+  socket.on('send-clear', (room, w, h) => {
+    socket.to(room).broadcast.emit('receive-clear', w, h);
   })
-
-  socket.on('send-clear', data => {
-    socket.broadcast.emit('receive-clear', data);
-  }) 
+  /*
+  socket.on('send-mousedown',(room,x,y,drawing) =>{
+    socket.to(room).broadcast.emit('receive-mousedown', x,y,drawing);
+  })
+  socket.on('send-mouseup',(room,drawing) => {
+    socket.to(room).broadcast.emit('receive-mouseup',drawing);
+  })
+  */
+  socket.on('game-start', room => {
+    socket.to(room).broadcast.emit('prevnet-pointer');
+    io.to(room).emit('reset-canvas');
+  })
 })
 
 function getUserRooms(socket) {
@@ -155,7 +164,7 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res, next)  => {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -165,4 +174,6 @@ app.use((err, req, res, next)  => {
   res.render('error');
 });
 
+
+server.listen(3000);
 module.exports = app;
