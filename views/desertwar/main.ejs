@@ -6,12 +6,34 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <title>Desert War</title>
+    <style>
+    #btn_group button:hover{
+            color: white;
+            background-color: skyblue;
+        }
+    #start_btn{
+
+        border: 1px solid skyblue;
+        background-color: rgba(0,0,0,0);
+        color: skyblue;
+        padding: 5px;
+    }
+    canvas{
+        background-image: url("../images/desertwar/startimg.png");
+        width: 1500px;
+        height: 700px;
+    }
     
+    </style>
     
 </head>
 <body>
     <% include ../header%>
-    <div style="display: flex; justify-content: center;"><canvas id="myCanvas" width="1500" height="700"></canvas></div>
+    <div style="display: flex; justify-content: center;">
+    <canvas id="myCanvas" width="1500" height="700" >
+>
+    </canvas></div>
+    
     
     <script>
         var canvas = document.getElementById("myCanvas");
@@ -24,6 +46,10 @@
         // 배경 이미지의 x 좌표
         var back1X=0;
         var back2X =-1500;
+        // 스타트 이미지 로딩
+        var startimg = new Image();
+        startimg.src = "../images/desertwar/startimg.png";
+        ctx.drawImage(startimg,0,0,1500,700);
 
         // 죽는 이미지 로딩
         var dieImg = new Image();
@@ -73,6 +99,7 @@
 
         document.addEventListener("keydown", keyDownHandler, false);
         document.addEventListener("keyup", keyUpHandler, false);
+        
 
         function keyDownHandler(e) {
         if(e.keyCode == 39) {
@@ -108,6 +135,11 @@
             attackPressed = false;
         }
     }
+    
+    document.getElementById("start_btn").onclick = function () {
+           init();
+        }
+    function init(){
         var intervalID = setInterval(function(){
             count++;
             enemycount ++;
@@ -140,6 +172,7 @@
             checkMissHit();
             checkPilotHit();
         },20);
+       
        
         // setInterval(function(){
         //      // 미사일 이미지 그리기
@@ -333,7 +366,11 @@
                 }
             }
         }
+    }
     </script>
+    <div id="btn_group">
+        <button id="start_btn" onclick="init()">START</button>
+    </div>
     <% include ../footer%>
 </body>
 </html>
