@@ -5,11 +5,7 @@ const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
 
 if (messageForm != null) {
-<<<<<<< HEAD
   const name = prompt('your name?') 
-=======
-  const name = prompt('your name?')
->>>>>>> 0b62fabfcbd752c363ce80f847230b11e7e3b16c
   appendMessage(`${name} 님이 입장`)
   socket.emit('new-user', roomName, name)
 
@@ -26,11 +22,7 @@ socket.on('room-created', room => {
   const roomElement = document.createElement('div')
   roomElement.innerText = room
   const roomLink = document.createElement('a')
-<<<<<<< HEAD
   roomLink.href = `/${room}`
-=======
-  roomLink.href = `${room}`
->>>>>>> 0b62fabfcbd752c363ce80f847230b11e7e3b16c
   roomLink.innerText = 'join'
   roomContainer.append(roomElement)
   roomContainer.append(roomLink)
@@ -53,7 +45,3 @@ function appendMessage(message) {
   messageElement.innerText = message
   messageContainer.append(messageElement)
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 0b62fabfcbd752c363ce80f847230b11e7e3b16c
