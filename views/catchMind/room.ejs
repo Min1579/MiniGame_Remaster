@@ -13,6 +13,7 @@
   <script defer src="javascripts/script.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <script defer src="javascripts/sketch.js"></script>
+<<<<<<< HEAD
 </head>
 <style>
 #canvas {
@@ -20,12 +21,26 @@
   border-radius: 50px 50px;
 }
 </style>
+=======
+  <script defer src="javascripts/gameProc.js"></script>
+</head>
+<style>
+  #canvas {
+    border: 5px solid black;
+    border-radius: 50px 50px;
+    
+  }
+
+</style>
+
+>>>>>>> 0b62fabfcbd752c363ce80f847230b11e7e3b16c
 <body>
   <header>
     <% include ../header %>
   </header>
   <br>
   <div class="container">
+<<<<<<< HEAD
     <div>
       <label for="selcolor">색상 : </label> 
       <select id="selcolor">
@@ -44,6 +59,33 @@
       <input class="btn btn-default" type="button" id="clear" value="모두 지움">
     </div>
 
+=======
+    <div class="row">
+      <div class="col-xs-2">
+        <select class="form-control col-xm-2" id="selcolor">
+          <option value="black">검정</option>
+          <option value="red">빨강</option>
+          <option value="green">초록</option>
+          <option value="blue">파랑</option>
+          <option value="magenta">분홍</option>
+        </select>
+      </div>
+      <div class="col-xs-2">
+        <select class="form-control" id="selwidth">
+          <option value="5">얇게</option>
+          <option value="10">중간</option>
+          <option value="15">굵게</option>
+        </select>
+      </div>
+      <div class="col-xs-2">
+          <input id="answer" type="text" class="form-control" placeholder="정답입력" required>
+      </div>
+      <div class="col-xs-2" id="result"></div>
+      <button class="btn btn-default pull-right" id="clear">CLEAR CANVAS</button>
+      <button class="btn btn-default btn-primary pull-right" id="startBtn">GAME START</button>
+    </div>
+    <br>
+>>>>>>> 0b62fabfcbd752c363ce80f847230b11e7e3b16c
     <canvas id="canvas" width="1140" height="600"></canvas>
     <br><br>
     <div class="jumbotron">
@@ -59,4 +101,8 @@
     </footer>
   </div>
 </body>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b62fabfcbd752c363ce80f847230b11e7e3b16c
 </html>

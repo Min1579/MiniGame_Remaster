@@ -31,10 +31,11 @@
     <% include ../header%>
     <div style="display: flex; justify-content: center;">
     <canvas id="myCanvas" width="1500" height="700" >
->
+
     </canvas></div>
     
     
+
     <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
@@ -42,6 +43,7 @@
         var stopMove = 0;
         var enemyDie = false;
         var pilotDie = false;
+
         var enemycount = 0;
         // 배경 이미지의 x 좌표
         var back1X=0;
@@ -71,6 +73,7 @@
         // 비행기의 좌표
         var unitX = 100;
         var unitY = 350;
+
         // 적 이미지 로딩
         var enemyImg1 = new Image();
         var enemyImg2 = new Image();
@@ -99,7 +102,6 @@
 
         document.addEventListener("keydown", keyDownHandler, false);
         document.addEventListener("keyup", keyUpHandler, false);
-        
 
         function keyDownHandler(e) {
         if(e.keyCode == 39) {
@@ -135,7 +137,6 @@
             attackPressed = false;
         }
     }
-    
     document.getElementById("start_btn").onclick = function () {
            init();
         }
@@ -172,8 +173,6 @@
             checkMissHit();
             checkPilotHit();
         },20);
-       
-       
         // setInterval(function(){
         //      // 미사일 이미지 그리기
         //      for(var i=0;i<missileList.length;i++){
@@ -184,7 +183,6 @@
         //     moveMissile();
         //     checkMissile();
         // },100)
-       
         function makeEnemy(){
             
             // 0~200 사이의 랜덤 실수 발생
@@ -340,6 +338,7 @@
                     stopMove = 1;
                     pilotDie = true;
                     ctx.drawImage(pilotImgs[2],unitX-50,unitY-50,100,100);
+
                 }
             }
         }
@@ -349,7 +348,6 @@
                 for(var j=0; j<enemyList.length;j++){
                     var enemy = enemyList[j];
                     var isShooted = miss.x>enemy.x-50&&miss.x<enemy.x+50&&miss.y>enemy.y-50&&miss.y<enemy.y+50;
-            
                     if(isShooted){
                         miss.isDead=true;
                         enemy.energy -= 50;
