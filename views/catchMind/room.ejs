@@ -16,36 +16,45 @@
   <script defer src="javascripts/gameProc.js"></script>
 </head>
 <style>
-#canvas {
-  border: 5px solid black;
-  border-radius: 50px 50px;
-}
+  #canvas {
+    border: 5px solid black;
+    border-radius: 50px 50px;
+    
+  }
+
 </style>
+
 <body>
   <header>
     <% include ../header %>
   </header>
   <br>
   <div class="container">
-    <div>
-      <label for="selcolor">색상 : </label> 
-      <select id="selcolor">
-        <option value="black">검정</option>
-        <option value="red">빨강</option>
-        <option value="green">초록</option>
-        <option value="blue">파랑</option>
-        <option value="magenta">분홍</option>
-      </select>
-      <label for="selwidth"> 굵기 : </label>  
-      <select id="selwidth">
-        <option value="5">얇게</option>
-        <option value="10">중간</option>
-        <option value="15">굵게</option>
-      </select>
-      <button class="btn btn-default" id="clear">CLEAR CANVAS</button>
+    <div class="row">
+      <div class="col-xs-2">
+        <select class="form-control col-xm-2" id="selcolor">
+          <option value="black">검정</option>
+          <option value="red">빨강</option>
+          <option value="green">초록</option>
+          <option value="blue">파랑</option>
+          <option value="magenta">분홍</option>
+        </select>
+      </div>
+      <div class="col-xs-2">
+        <select class="form-control" id="selwidth">
+          <option value="5">얇게</option>
+          <option value="10">중간</option>
+          <option value="15">굵게</option>
+        </select>
+      </div>
+      <div class="col-xs-2">
+          <input id="answer" type="text" class="form-control" placeholder="정답입력" required>
+      </div>
+      <div class="col-xs-2" id="result"></div>
+      <button class="btn btn-default pull-right" id="clear">CLEAR CANVAS</button>
       <button class="btn btn-default btn-primary pull-right" id="startBtn">GAME START</button>
     </div>
-    <br><br>
+    <br>
     <canvas id="canvas" width="1140" height="600"></canvas>
     <br><br>
     <div class="jumbotron">
@@ -61,4 +70,5 @@
     </footer>
   </div>
 </body>
+
 </html>

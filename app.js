@@ -141,12 +141,14 @@ io.on('connection', socket => {
   })
   socket.on('send-mouseup',(room,drawing) => {
     socket.to(room).broadcast.emit('receive-mouseup',drawing);
-  })
+  })  
   */
-  socket.on('game-start', room => {
-    socket.to(room).broadcast.emit('prevnet-pointer');
-    io.to(room).emit('reset-canvas');
+  socket.on('game-start', (room, answer) => {
+    socket.to(room).broadcast.emit('prevent-pointer');
+    socket.to(room).broadcast.emit('reset-canvas');
+    socket.to(room).broadcast.emit('send-answer', answer);
   })
+
 })
 
 function getUserRooms(socket) {
