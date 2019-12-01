@@ -33,10 +33,10 @@ inputAnswer.addEventListener('keyup', () => {
 });
 
 socket.on('game-finish', name => {
-    alert(`${name}님이 정답을 맞추었습니다\n정답공개:${ANSWER}`)
-    document.querySelector("#canvas").style['pointer-events'] = "";
-    startBtn.setAttribute('disabled', false);
-    clearBtn.setAttribute('disabled', false);
+    alert(`정답을 맞추었습니다\n정답공개:${ANSWER}`)
+    document.querySelector("#canvas").style['pointer-events'] = "null";
+    startBtn.removeAttribute('disabled')
+    clearBtn.removeAttribute('disabled');
 });
 
 socket.on('send-answer', _answer => {
@@ -50,5 +50,3 @@ socket.on('prevent-pointer', () => {
     startBtn.setAttribute('disabled', true);
     clearBtn.setAttribute('disabled', true);
 });
-
-

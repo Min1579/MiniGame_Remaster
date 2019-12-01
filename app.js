@@ -172,11 +172,11 @@ io.on('connection', socket => {
     socket.to(room).broadcast.emit('send-answer', answer);
   })
   socket.on('get-answer', room => {
-    console.log(req.user);
-    io.to(room).emit('game-finish', req.user);
+    io.to(room).emit('game-finish');
     /* db저장*/
   })
 })
+
 
 function getUserRooms(socket) {
   return Object.entries(rooms).reduce((names, [name, room]) => {
