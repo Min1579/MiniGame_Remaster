@@ -26,8 +26,7 @@ const server = http.createServer(app);
 
 const io = require('socket.io')(server);
 
-const  port = process.env.PORT || 3000;
-server.listen(port);
+server.listen(process.env.PORT || 3000)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
