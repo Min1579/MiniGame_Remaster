@@ -30,7 +30,10 @@ const io = require('socket.io')(server);
 const port = normalizePort(process.env.PORT || 3000);
 app.set('port', port);
 
-server.listen(port);
+server.listen(port => {
+  console.log(`Server started port ${app.get('port')}`);
+  
+});
 server.on('error', onError);
 server.on('listening', onListening);
 
