@@ -26,7 +26,9 @@ router.get('/', (req, res) => {
 // 게시글 작성
 router.get('/register', (req, res) => {
     if (!req.user) res.redirect('/login')
+
     return res.render('board/register')
+
 })
 
 //게시글 작성완료
@@ -48,20 +50,23 @@ router.post('/register', (req, res) => {
             if (err) throw err;
             console.log('board added!');
         })
+
         return res.redirect('/board')
+
     })
 })
 
 // 게시글 업데이트
-router.get('/update', (req,res) => {
+
+router.get('/update', (req, res) => {
     const no = req.query.no;
     const title = req.query.title;
     const content = req.query.content;
     const name = req.query.name;
     const postdate = req.query.postdate;
-    console.log(no,title,content,name,postdate);
-    
-    res.render('board/update', {no:no, title:title,content:content,name:name, postdate:postdate })
+    console.log(no, title, content, name, postdate);
+
+    res.render('board/update', { no: no, title: title, content: content, name: name, postdate: postdate })
 })
 
 // 게시글 업데이트 완료
@@ -72,11 +77,11 @@ router.post('/update', (req, res) => {
     const postdate = `(modified) ${(new Date()).toDateString()}`;
     const name = req.body.name;
 
-    if(req.user != name) res.redirect('/login');
+    if (req.user != name) res.redirect('/login');
     console.log(`title:${title}, content :${content}, name:${name}, no:${no}`);
 
     const query = connection.query('update board set title=?, content=?, postdate=? where no=?', [title, content, postdate, no], (err, rows) => {
-        if(err) throw err;
+        if (err) throw err;
         console.log(`${no} post modified!`);
     })
     return res.redirect(`/board/b?no=${no}`);
@@ -84,26 +89,28 @@ router.post('/update', (req, res) => {
 
 router.get('/delete', (req, res) => {
     console.log('delete process started!');
-    
+
     const name = req.query.name;
     const no = req.query.no;
     console.log(`no: ${req.query.no}, name:${name}, auth:${req.user}`);
-    
-    if(req.user != name) { res.redirect('/login')}
 
-    const query = connection.query('delete from board where no = ?', [no], (err,rows) => { if(err) throw err; })
+    if (req.user != name) { res.redirect('/login') }
+
+    const query = connection.query('delete from board where no = ?', [no], (err, rows) => { if (err) throw err; })
     res.redirect('/board');
 });
 
-router.get('/delete_reply', (req,res) => {
+
+router.get('/delete_reply', (req, res) => {
     const query = req.query;
     const no = query.no;
     const name = query.name;
 
-    if(name !== req.user) { res.redirect('/login'); }
 
-    const replyDeleteQuery = connection.query('delete from reply where no=? and name=?',[no, req.user], (err, rows) => {
-        if(err) throw err;
+    if (name !== req.user) { res.redirect('/login'); }
+
+    const replyDeleteQuery = connection.query('delete from reply where no=? and name=?', [no, req.user], (err, rows) => {
+        if (err) throw err;
         res.redirect(`/board/b?no=${req.query.origin_no}`)
     })
 })

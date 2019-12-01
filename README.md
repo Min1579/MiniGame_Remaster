@@ -5,7 +5,6 @@ create table user (
     comment text null
 );
 
-
 -- auto-generated definition
 create table board
 (
@@ -17,7 +16,9 @@ create table board
     content  text        not null,
     postdate varchar(30) not null,
     view     int         not null,
-    b_pwd    varchar(30) not null
+    b_pwd    varchar(30) not null,
+    foreign key(email) references user(email) 
+    on delete cascade
 );
 
 -- auto-generated definition
@@ -28,8 +29,16 @@ create table reply
     ref       int         not null,
     r_content text        not null,
     postdate  varchar(30) not null,
-    name      varchar(30) not null
+    name      varchar(30) not null,
+    foreign key(ref) references board(no) 
+    on delete cascade
 );
 
-
-
+//닷지 게임 테이블
+create table dodge(
+    email    varchar(50) not null,
+    name     varchar(50) not null,
+    score    int not null,
+    foreign key(email) references user(email) 
+    on delete cascade
+);

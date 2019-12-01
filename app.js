@@ -19,11 +19,11 @@ const userBoardRouter = require('./routes/board');
 const mypageRouter = require('./routes/mypage');
 const dodgeRouter = require('./routes/dodge/dodge');
 const desertRouter = require('./routes/desertwar/desertwar')
-const ajaxRouter = require('./routes/ajax');
 
 
 const app = express();
 const server = http.createServer(app);
+
 const io = require('socket.io')(server);
 
 const  port = process.env.PORT || 3000;
@@ -50,9 +50,8 @@ app.use(flash());
 app.use(logger('dev'));
 //body-parser
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(bodyParser.urlencoded({ extended: true }));
+
 //cookie-parser
 app.use(cookieParser());
 //public folder 고정
@@ -67,9 +66,8 @@ app.use('/board', userBoardRouter);
 app.use('/rank', rankBoardRouter)
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
-app.use('/dodge', dodgeRouter);
+app.use('/dodge',dodgeRouter);
 app.use('/desertwar', desertRouter)
-app.use('/ajax', ajaxRouter);
 app.use('/', indexRouter);
 
 
@@ -86,9 +84,11 @@ app.post('/room', (req, res) => {
   if (rooms[req.body.room] != null) {
     return res.redirect('/cmm')
   }
+
   rooms[req.body.room] = {
     users: {}
   }
+
   res.redirect(req.body.room)
   // Send message that new room was created
   io.emit('room-created', req.body.room)
@@ -98,6 +98,7 @@ app.get('/:room', (req, res) => {
   if (rooms[req.params.room] == null) {
     return res.redirect('/cmm')
   }
+
   res.render('catchMind/room', {
     roomName: req.params.room
   })
@@ -111,6 +112,7 @@ io.on('connection', socket => {
     socket.to(room).broadcast.emit('user-connected', name)
   })
   socket.on('send-chat-message', (room, message) => {
+
     socket.to(room).broadcast.emit('chat-message', {
       message: message,
       name: rooms[room].users[socket.id]
@@ -171,6 +173,7 @@ app.use((req, res, next) => {
 });
 
 // error handler
+
 app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -180,7 +183,5 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
 
 module.exports = app;

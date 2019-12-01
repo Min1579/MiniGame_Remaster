@@ -4,12 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <title>Desert War</title>
-    <h1>Desert War</h1>
+    <style>
+    #btn_group button:hover{
+            color: white;
+            background-color: skyblue;
+        }
+    #start_btn{
+
+        border: 1px solid skyblue;
+        background-color: rgba(0,0,0,0);
+        color: skyblue;
+        padding: 5px;
+    }
+    canvas{
+        background-image: url("../images/desertwar/startimg.png");
+        width: 1500px;
+        height: 700px;
+    }
+    
+    </style>
     
 </head>
 <body>
-    <canvas id="myCanvas" width="1500" height="700"></canvas>
+    <% include ../header%>
+    <div style="display: flex; justify-content: center;">
+    <canvas id="myCanvas" width="1500" height="700" >
+
+    </canvas></div>
+    
+    
+
     <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
@@ -17,9 +43,15 @@
         var stopMove = 0;
         var enemyDie = false;
         var pilotDie = false;
+
+        var enemycount = 0;
         // 배경 이미지의 x 좌표
         var back1X=0;
         var back2X =-1500;
+        // 스타트 이미지 로딩
+        var startimg = new Image();
+        startimg.src = "../images/desertwar/startimg.png";
+        ctx.drawImage(startimg,0,0,1500,700);
 
         // 죽는 이미지 로딩
         var dieImg = new Image();
@@ -37,10 +69,12 @@
         var pilotImgs=[pilotImg1,pilotImg2,dieImg];
         // 출력할 비행기의 이미지 인덱스
         var pilotIndex=1;
+        
 
         // 비행기의 좌표
         var unitX = 100;
-        var unitY = canvas.height /2;
+        var unitY = 350;
+
         // 적 이미지 로딩
         var enemyImg1 = new Image();
         var enemyImg2 = new Image();
@@ -104,8 +138,13 @@
             attackPressed = false;
         }
     }
+    document.getElementById("start_btn").onclick = function () {
+           init();
+        }
+    function init(){
         var intervalID = setInterval(function(){
             count++;
+            enemycount ++;
             missileTime1 += 50;
             // 배경 이미지 그리기
             ctx.drawImage(backImg,back1X,0,1500,700);
@@ -134,9 +173,7 @@
             checkEnemy();
             checkMissHit();
             checkPilotHit();
-            dieAnimation();
         },20);
-       
         // setInterval(function(){
         //      // 미사일 이미지 그리기
         //      for(var i=0;i<missileList.length;i++){
@@ -148,18 +185,26 @@
         //     checkMissile();
         // },100)
         function makeEnemy(){
-            // 0~50 사이의 랜덤 실수 발생
-            var ranNum = Math.random()*200;
+            
+            // 0~200 사이의 랜덤 실수 발생
+            var ranNum = Math.random()*50;
             // 실수를 내림 연산하여 정수로 만듬
             var result = Math.floor(ranNum);
-            if(result != 10){// 10이 아니면
-                return; // 함수끝내기(적기 안만듬)
+            if(enemycount == 100){// 10이 아니면
+                var enemyY = [500,450,350,250,150,50];
+            for (var i =0 ; i < 5 ; i ++){
+                var j = Math.floor(Math.random()*6)
+                var temp = enemyY[i] 
+                enemyY[i] = enemyY[j]
+                enemyY[j] = temp; 
             }
-            var enemyY = [450,350,250,150,50];
+            for (var i =0 ; i < Math.floor(Math.random()*3)+3 ; i ++){
+                enemyY.pop();
+            }
             // for문 5번
             for(var i=0; i<5; i++){
                 obj={};
-                obj.x=1500
+                obj.x=1500;    
                 obj.y=enemyY[i];
                 // type에 0 혹은 1을 랜덤하게 부여
                 var result = Math.floor(Math.random()*2);
@@ -171,12 +216,17 @@
                 }
                 obj.isDead = false;
                 enemyList.push(obj);
+                enemycount = 0;
             }
-        }
+        } else{
+            return; // 함수끝내기(적기 안만듬)
+            }
+    }
         function moveEnemy(){
+            var enemySpeed = Math.floor((Math.random()*20)+1);
             for(var i=0; i<enemyList.length;i++){
                 var tmp = enemyList[i];
-                tmp.x = tmp.x-5;
+                tmp.x = tmp.x-enemySpeed;
                 if(tmp.x <=-50 ){
                     tmp.isDead=true;
                 }
@@ -217,7 +267,7 @@
             }
             var obj = {};
             obj.x = unitX;
-            obj.y = unitY;
+            obj.y = unitY+15;
             obj.isDead = false;
             missileList.push(obj);
         }
@@ -288,7 +338,8 @@
                     clearInterval(intervalID);
                     stopMove = 1;
                     pilotDie = true;
-                    
+                    ctx.drawImage(pilotImgs[2],unitX-50,unitY-50,100,100);
+
                 }
             }
         }
@@ -297,13 +348,13 @@
                 var miss = missileList[i];
                 for(var j=0; j<enemyList.length;j++){
                     var enemy = enemyList[j];
-
                     var isShooted = miss.x>enemy.x-50&&miss.x<enemy.x+50&&miss.y>enemy.y-50&&miss.y<enemy.y+50;
                     if(isShooted){
                         miss.isDead=true;
                         enemy.energy -= 50;
                         if(enemy.energy <= 0){
                             enemy.isDead = true;
+                            ctx.drawImage(pilotImgs[2],enemy.x-50,enemy.y-50,100,100);
                             if(enemy.type ==0 ){
                                 score += 10;
                             } else if(enemy.type == 1){
@@ -314,21 +365,11 @@
                 }
             }
         }
-        function dieAnimation(){
-            if(pilotDie == true){
-                ctx.drawImage(pilotImgs[2],unitX-50,unitY-50,100,100);
-            }
-            
-            for(var i=enemyList.length-1; i>=0;i--){
-                var tmp = enemyList[i];
-                if(tmp.isDead){
-                    enemyList.splice(i,1);
-                    enemyDie = ture;
-                }
-            }
-                ctx.drawImage(pilotImgs[2],unitX-50,unitY-50,100,100);
-            }
-        
+    }
     </script>
+    <div id="btn_group">
+        <button id="start_btn" onclick="init()">START</button>
+    </div>
+    <% include ../footer%>
 </body>
 </html>
