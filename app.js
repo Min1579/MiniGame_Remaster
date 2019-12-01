@@ -12,7 +12,6 @@ const flash = require('connect-flash');
 const session = require('express-session');
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 const registerRouter = require('./routes/register');
 const loginRouter = require('./routes/login');
 const rankBoardRouter = require('./routes/rankBoard');
@@ -71,7 +70,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //routing
 app.use('/mypage', mypageRouter);
-app.use('/users', usersRouter);
 app.use('/board', userBoardRouter);
 app.use('/rank', rankBoardRouter)
 app.use('/register', registerRouter);
