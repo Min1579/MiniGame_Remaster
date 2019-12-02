@@ -7,7 +7,7 @@ const path = require('path');
 router.get('/', (req, res) => {
     const query = connection.query('select * from board order by no desc', (err, rows) => {
         const blist = [];
-        if (err) throw err;
+   //if (err) throw err;
         rows.forEach(row => {
             blist.push({
                 no: row.no,
@@ -110,7 +110,7 @@ router.get('/delete_reply', (req, res) => {
     if (name !== req.user) { res.redirect('/login'); }
 
     const replyDeleteQuery = connection.query('delete from reply where no=? and name=?', [no, req.user], (err, rows) => {
-        if (err) throw err;
+        //if (err) throw err;
         res.redirect(`/board/b?no=${req.query.origin_no}`)
     })
 })
