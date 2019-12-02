@@ -25,20 +25,14 @@ const app = express();
 const server = http.createServer(app);
 
 const io = require('socket.io')(server);
+
 const port = normalizePort(process.env.PORT || 3000);
 app.set('port', port);
 
-server.listen(port)
+server.listen(port);
+
 server.on('error', onError);
 server.on('listening', onListening);
-
-
-
-io.configure(() => { 
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10); 
-});
-socket = new io.Socket();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

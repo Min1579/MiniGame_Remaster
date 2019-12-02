@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io('http://localhost:3000')
 const messageContainer = document.getElementById('message-container')
 const roomContainer = document.getElementById('room-container')
 const messageForm = document.getElementById('send-container')
@@ -19,7 +19,7 @@ if (messageForm != null) {
   })
 }
 
-socket.on('update-userlist' ,nameList => {
+socket.on('update-userlist', nameList => {
   output = ""
   nameList.forEach(name => {
     output += `<li class="list-group-item">${name}</li>`
@@ -42,9 +42,9 @@ socket.on('chat-message', data => {
   appendMessage(`${data.name}: ${data.message}`)
 })
 
-socket.on('user-connected', name => {
+socket.on('user-connected', (name => {
   appendMessage(`${name} connected`)
-})
+}))
 
 socket.on('user-disconnected', name => {
   appendMessage(`${name} disconnected`)
