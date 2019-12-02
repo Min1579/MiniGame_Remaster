@@ -7,7 +7,7 @@ const path = require('path');
 router.get('/', (req, res) => {
     const query = connection.query('select * from board order by no desc', (err, rows) => {
         const blist = [];
-    if (err) throw err;
+    if (err)  ()=> {}//throw err;
         rows.forEach(row => {
             blist.push({
                 no: row.no,
