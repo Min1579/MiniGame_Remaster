@@ -79,7 +79,7 @@ router.post('/update', (req, res) => {
 
     if (req.user != name) res.redirect('/login');
     console.log(`title:${title}, content :${content}, name:${name}, no:${no}`);
-
+    
     const query = connection.query('update board set title=?, content=?, postdate=? where no=?', [title, content, postdate, no], (err, rows) => {
         if (err) throw err;
         console.log(`${no} post modified!`);
