@@ -6,7 +6,7 @@ const roomContainer = document.getElementById('room-container')
 const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
 const userList = document.querySelector('ul.list-group');
-
+alert(port)
 if (messageForm != null) {
   const name = prompt('이름을 입력하세요') //getUserName();
   appendMessage(`${name} 님이 입장`)
