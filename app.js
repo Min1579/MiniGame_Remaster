@@ -106,7 +106,7 @@ app.get('/:room', (req, res) => {
   }
 
   res.render('catchMind/room', {
-    roomName: req.params.room, port:port
+    roomName: req.params.room, port:app.get('port')
   })
 })
 
