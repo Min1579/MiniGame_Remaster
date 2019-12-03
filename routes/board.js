@@ -7,16 +7,16 @@ const mysql = require('mysql2');
 
 router.get('/', (req, res) => {
     pool.getConnection((err, connection) => {
-    const blist = [];
-    connection.query('select * from board order by no desc', (err,rows) => {
-        if (err)  throw err;
-        rows.forEach(row => {
-            blist.push({
-                no: row.no,
-                title: row.title,
-                writer: row.name,
-                postdate: row.postdate,
-                view: row.view
+        const blist = [];
+        connection.query('select * from board order by no desc', (err,rows) => {
+            if (err)  throw err;
+            rows.forEach(row => {
+                blist.push({
+                    no: row.no,
+                    title: row.title,
+                    writer: row.name,
+                    postdate: row.postdate,
+                    view: row.view
             });
         });
         connection.release();
@@ -34,7 +34,7 @@ router.get('/register', (req, res) => {
 router.post('/register', (req, res) => {
     const sql = {}
     pool.getConnection((err,connection) => {
-        connection.query(`select email from user where name = ${req.user}`, (err,rows) => {
+        connection.query('select email from user where name =?',[req.user], (err,rows) => {
             sql.email = rows[0].email,
             sql.name = req.user,
             sql.title = req.body.title,
@@ -46,7 +46,7 @@ router.post('/register', (req, res) => {
         })
     })
     pool.getConnection((err, connection) => {
-        connection.query(`insert into board set ${sql}`, (err,rows) =>{
+        connection.query('insert into board set ?', [sql],(err,rows) =>{
             if(err) throw err;
             connection.release();
         })
@@ -168,7 +168,7 @@ router.get('/b', (req, res) => {
         })
     const replies = [];
     pool.getConnection((err,connection) => {
-        connection.query(`select * from reply where ref = ${req.body.no || req.body.no} order by no asc`, (err,rows) => {
+        connection.query('select * from reply where ref = ? order by no asc',[req.body.no || req.body.no], (err,rows) => {
             rows.forEach(row => {
                 const r = {
                     no: row.no,

@@ -56,7 +56,6 @@ passport.use('local-join', new LocalStrategy({
     pool.getConnection((err,connection) => {
         connection.query('select name from user where email = ?',[req.body.name], (err,rows) => {
             if(err) throw err;
-            console.log('#################',rows[0].name);
             if(rows.length > 0) {
                 console.log('this name  is being used');
                 connection.release();
