@@ -145,15 +145,15 @@ router.post('/post_reply', (req, res) => {
 
 router.get('/b', (req, res) => {
     pool.getConnection((err,connection) => {
-        connection.query(`update board set view=view+1 where no = ${req.body.no}`, (err,rows) => {
+        connection.query('update board set view=view+1 where no = ?',[req.body.no], (err,rows) => {
             console.log('view updated!');
             connection.release();
         })
     })
 
+    const p = {};
     pool.getConnection((err,connection) => {
-        const p = {};
-        connection.query(`select * from board where no = ${req.query.no || req.body.no}`, (err,rows) => {
+        connection.query('select * from board where no = ?',[req.query.no || req.body.no], (err,rows) => {
             if(err) throw err;
             if(rows[0]) {
                 if (rows[0]) {
@@ -166,6 +166,7 @@ router.get('/b', (req, res) => {
             }
             connection.release();
         })
+    });
     const replies = [];
     pool.getConnection((err,connection) => {
         connection.query('select * from reply where ref = ? order by no asc',[req.body.no || req.body.no], (err,rows) => {
@@ -187,5 +188,5 @@ router.get('/b', (req, res) => {
     return res.render('board/post', {p: p, replies: replies });
     })
 });
-});
+
 module.exports = router;
