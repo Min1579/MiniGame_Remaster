@@ -40,7 +40,7 @@ passport.use('local-join', new LocalStrategy({
     console.log('local-join callback called!');
     const query = connection.query(`select email from user where email = ${email}`, (err, rows) => {
         if (err) done(err); // done 비동기 처리 
-        if (rows[0]) {
+        if (rows.length)  {
             console.log(`${email} is already in use`);
             return done(null, false, {message : `${email} is already in use`}); //두번쨰 false -> failure Redirect , message -> flash
         } else {
