@@ -1,4 +1,3 @@
-//const socket = io('http://localhost:3000')
 const socket = io(`https://${window.location.hostname}:${window.location.port}`);
 const messageContainer = document.getElementById('message-container')
 const roomContainer = document.getElementById('room-container')
