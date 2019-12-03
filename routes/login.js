@@ -35,7 +35,7 @@ passport.use('local-login', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'pwd',
     passReqToCallback: true
-}, async (req, email, pwd, done) => {
+}, (req, email, pwd, done) => {
     console.log('local-login callback called!');
     pool.query(`select email,pwd,name from user where email=${email} and pwd = ${pwd}`, (err, rows) => {
         if(err) return done(err);
