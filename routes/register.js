@@ -40,7 +40,7 @@ passport.use('local-join', new LocalStrategy({
 }, (req, email, pwd, done) => {
     console.log('local-join callback called!');
     pool.query(`select email from user where email = ${email}`, (err, rows) => {
-        if (err) done(err); // done 비동기 처리 
+        if (err) done(err);
         console.log('######################',rows);
         
         if (rows.length > 0)  {
