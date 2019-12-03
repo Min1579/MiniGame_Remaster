@@ -1,4 +1,4 @@
-const port = "<%= port %%>"
+const port = "<%= port %>"
 //const socket = io('http://localhost:3000')
 const socket = io(`https://minigameheaven.herokuapp.com:${port}`);
 const messageContainer = document.getElementById('message-container')
