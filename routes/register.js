@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const LocalStrategy= require('passport-local').Strategy;
-const connection = require('../config/database');
+const pool = require('../config/database');
+const mysql = require('mysql2');
 
 
 /* local-join 회원가입 */ 
@@ -36,17 +37,17 @@ passport.use('local-join', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'pwd',
     passReqToCallback: true
-}, async (req, email, pwd, done) => {
+}, (req, email, pwd, done) => {
     console.log('local-join callback called!');
-    const query = connection.query(`select email from user where email = ${email}`, (err, rows) => {
+    pool.query(`select email from user where email = ${email}`, (err, rows) => {
         if (err) done(err); // done 비동기 처리 
         console.log('######################',rows);
         
-        if (rows.length)  {
+        if (rows.length > 0)  {
             console.log(`${email} is already in use`);
             return done(null, false, {message : `${email} is already in use`}); //두번쨰 false -> failure Redirect , message -> flash
         } else {
-            const query = connection.query('select name from user where name = ?', [req.body.name],  async (err, rows) => {
+            pool.query(`select name from user where name = ${req.body.name}`, (err, rows) => {
                 if (err) done(err);
                 if(rows.length) {
                     return done(null, false, {message: `${req.body.name} is already in use`});
@@ -56,11 +57,19 @@ passport.use('local-join', new LocalStrategy({
                         pwd: pwd,
                         name:req.body.name
                     }
+                    pool.getConnection((err,connection) => {
+                        connection.query(`insert into user set ${user}`, (err,rows) => {
+                            connection.release();
+                            return done(null, user.name);
+                        })
+                    })
+                    /*
                     const query = connection.query('insert into user set ?' , user, (err,rows) => {
                         console.log(user);
                         console.log('user added!');
                         return done(null, user.name);
                     });
+                    */
                 }
             })
         }

@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
     host: 'us-cdbr-iron-east-05.cleardb.net',
     port: 3306,
     user: 'b0115c6bec9292',
@@ -8,8 +8,5 @@ const connection = mysql.createConnection({
     database: 'heroku_121397ed296abf5'
 });
 
-connection.on('error', function() {});
 
-connection.connect();
-
-module.exports = connection;
+module.exports = pool;
