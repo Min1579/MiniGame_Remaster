@@ -82,7 +82,7 @@ const rooms = {}
 
 app.get('/cmm', (req, res) => {
   res.render('catchMind/main', {
-    rooms: rooms, port:app.get('port')
+    rooms: rooms
   })
 })
 
@@ -106,7 +106,7 @@ app.get('/:room', (req, res) => {
   }
 
   res.render('catchMind/room', {
-    roomName: req.params.room, port:app.get('port')
+    roomName: req.params.room
   })
 })
 

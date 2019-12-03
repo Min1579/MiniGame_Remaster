@@ -39,7 +39,7 @@ passport.use('local-join', new LocalStrategy({
     passReqToCallback: true
 }, (req, email, pwd, done) => {
     console.log('local-join callback called!');
-    pool.query(`select email from user where email = ${email}`, (err, rows) => {
+    pool.query(`select email from user where email = ?`,[email], (err, rows) => {
         if (err) done(err);
         console.log('######################',rows);
         
@@ -58,7 +58,7 @@ passport.use('local-join', new LocalStrategy({
                         name:req.body.name
                     }
                     pool.getConnection((err,connection) => {
-                        connection.query(`insert into user set ${user}`, (err,rows) => {
+                        connection.query(`insert into user set ?`,[user], (err,rows) => {
                             connection.release();
                             return done(null, user.name);
                         })
