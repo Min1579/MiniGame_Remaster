@@ -39,13 +39,7 @@ inputAnswer.addEventListener('keyup', () => {
     console.log("answer:", ANSWER, " inputAnswer:", inputAnswer.value);
     const inputAnswerVal = inputAnswer.value;
     if (inputAnswerVal.length > 0) {
-        if (ANSWER != inputAnswer.value) {
-            result.style.color = 'red';
-            result.innerHTML = "정답이 아닙니다!";
-        } else {
-            /* db 점수 획득 구현*/
-            result.style.color = 'blue';
-            result.innerHTML = "정답!"
+        if (ANSWER == inputAnswer.value) {
             socket.emit('get-answer', roomName);
             addPoint(`https://${window.location.hostname}:${window.location.port}/catchmymind/ajax`)
         }
