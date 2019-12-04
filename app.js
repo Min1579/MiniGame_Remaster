@@ -67,6 +67,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //routing
+app.use('/', indexRouter);
 app.use('/catchmymind', cmmRouter);
 app.use('/mypage', mypageRouter);
 app.use('/board', userBoardRouter);
@@ -75,7 +76,7 @@ app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/dodge', dodgeRouter);
 app.use('/desertwar', desertRouter)
-app.use('/', indexRouter);
+
 
 
 // socket control (Dont touch)
