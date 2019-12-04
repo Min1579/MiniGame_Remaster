@@ -26,3 +26,5 @@ router.post('/ajax', (req,res)=>{
     const responseData = {msg:'점수가 추가되었습니다!'}
     res.json(responseData);
 })
+
+module.exports = router;
