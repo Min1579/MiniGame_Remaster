@@ -19,7 +19,7 @@ const userBoardRouter = require('./routes/board');
 const mypageRouter = require('./routes/mypage');
 const dodgeRouter = require('./routes/dodge/dodge');
 const desertRouter = require('./routes/desertwar/desertwar')
-
+const cmmRouter = require('./routes/cmm/ajax');
 
 const app = express();
 const server = http.createServer(app);
@@ -67,6 +67,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //routing
+app.use('/cmm', cmmRouter);
 app.use('/mypage', mypageRouter);
 app.use('/board', userBoardRouter);
 app.use('/rank', rankBoardRouter)
