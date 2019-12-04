@@ -38,14 +38,14 @@
                 <th>COMMENTS</th>
             </thead>
 
-            <% for (let i=0; i<20; i++) { %>
-            <tr>
-                <td> <%= i+1 %></td>
-                <td> MIN </td>
-                <td> <%= 1000 - i %></td>
-                <td> hihihihi</td>
-            </tr>
-            <% } %>
+            <% rows.forEach((row,idx)=> { %>
+                <tr>
+                    <td><%= idx+1 %></td>
+                    <td><%= row.name %></td>
+                    <td><%= row.point %> </td>
+                    <td></td>
+                </tr>
+            <% }) %>
         </table>
 
 

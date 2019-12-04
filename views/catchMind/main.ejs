@@ -17,12 +17,13 @@
   </header>
   <div class="container">
     <div class="jumbotron">
+      <h2> <%= name %>님 어서오세요!</h2>
       <form action="/room" method="POST">
         <input name="room" type="text" required>
         <button type="submit">New Room</button>
       </form>
     </div>
-    <table class="table">
+    <table class="table table-hover">
       <thead>
         <th>#</th>
         <th>방 제목</th>
@@ -31,9 +32,9 @@
       <div id="room-container">
         <% Object.keys(rooms).forEach((room,idx) => { %>
         <tr>
-          <td><%= idx + 1 %></td>
-          <td><%= room %></td>
-          <td><a href="/<%= room %>">Join</a></td>
+          <td><strong><%= idx + 1 %></strong></td>
+          <td><strong><%= room %></strong></td>
+          <td><a class="btn btn-default btn-primary" href="/<%= room %>">Join</a></td>
         </tr>
         <% }) %>
       </div>

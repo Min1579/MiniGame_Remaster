@@ -19,7 +19,7 @@ const userBoardRouter = require('./routes/board');
 const mypageRouter = require('./routes/mypage');
 const dodgeRouter = require('./routes/dodge/dodge');
 const desertRouter = require('./routes/desertwar/desertwar')
-
+const cmmRouter = require('./routes/cmm/ajax');
 
 const app = express();
 const server = http.createServer(app);
@@ -67,6 +67,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //routing
+app.use('/cmm', cmmRouter);
 app.use('/mypage', mypageRouter);
 app.use('/board', userBoardRouter);
 app.use('/rank', rankBoardRouter)
@@ -81,8 +82,9 @@ app.use('/', indexRouter);
 const rooms = {}
 
 app.get('/cmm', (req, res) => {
+  if(!req.user) res.redirect('/login')
   res.render('catchMind/main', {
-    rooms: rooms
+    rooms: rooms, name: req.user
   })
 })
 
@@ -106,7 +108,8 @@ app.get('/:room', (req, res) => {
   }
 
   res.render('catchMind/room', {
-    roomName: req.params.room
+    roomName: req.params.room,
+    name : req.user
   })
 })
 

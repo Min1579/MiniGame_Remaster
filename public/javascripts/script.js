@@ -6,7 +6,7 @@ const messageInput = document.getElementById('message-input')
 const userList = document.querySelector('ul.list-group');
 
 if (messageForm != null) {
-  const name = prompt('이름을 입력하세요') //getUserName();
+  //const name = prompt('이름을 입력하세요') //getUserName();
   appendMessage(`${name} 님이 입장`)
   socket.emit('new-user', roomName, name)
 

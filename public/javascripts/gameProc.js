@@ -16,6 +16,17 @@ startBtn.addEventListener('click', () => {
     }
 });
 
+function addPoint(url) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('post', url);
+    xhr.setRequestHeader('Content-Type',application.json);
+    xhr.send();
+    xhr.addEventListener('load', function() {
+        const responseMsg = JSON.parse(xhr.responseText);
+        alert(responseMsg.msg);
+    })
+}
+
 inputAnswer.addEventListener('keyup', () => {
     console.log("answer:", ANSWER, " inputAnswer:", inputAnswer.value);
     const inputAnswerVal = inputAnswer.value;
@@ -28,6 +39,7 @@ inputAnswer.addEventListener('keyup', () => {
             result.style.color = 'blue';
             result.innerHTML = "정답자가 나왔습니다"
             socket.emit('get-answer', roomName, name);
+            addPoint(`https://${window.location.hostname}:${window.location.port}/cmm/ajax`)
         }
     }
 });

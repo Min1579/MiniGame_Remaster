@@ -42,19 +42,21 @@
                 <form action="/board/post_reply" method="POST">
                     <tr>
                         <th> REPLY </th>
-                        <td colspan="4"><input type="text" placeholder="leave commnet..." class="form-control" name="r_content"></td>
+                        <td colspan="4"><input type="text" placeholder="leave commnet..." class="form-control"
+                                name="r_content"></td>
                         <input type="hidden" name="ref" value="<%=p.no%>">
                         <td><button class="btn btn-default">SEND</button></td>
                     </tr>
                 </form>
-                <% for (let i=0; i<replies.length; i++) { const r = replies[i]; %>
-                    <tr>
-                        <td><%= r.name %></td>
-                        <td><%= r.r_content %></td>
-                        <td><%= r.postdate %></td>
-                        <td><a href="#>">수정</a></td>
-                        <td><a href="/board/delete_reply?no=<%=r.no%>&name=<%=r.name%>&origin_no=<%=p.no%>">삭제</a></td>
-                    </tr>
+                <% for (let i = 0; i < replies.length; i++) { %>
+                <%  const r = replies[i]; %>
+                <tr>
+                    <td><%= r.name %></td>
+                    <td><%= r.r_content %></td>
+                    <td><%= r.postdate %></td>
+                    <td><a href="#>">수정</a></td>
+                    <td><a href="/board/delete_reply?no=<%=r.no%>&name=<%=r.name%>&origin_no=<%=p.no%>">삭제</a></td>
+                </tr>
                 <% } %>
 
             </tbody>
