@@ -171,7 +171,7 @@ io.on('connection', socket => {
   socket.on('game-start', (room, answer) => {
     socket.to(room).broadcast.emit('prevent-pointer');
     socket.to(room).broadcast.emit('send-answer', answer);
-    io.socket(room).emit('game-start-status');
+    io.to(room).emit('game-start-status');
   })
   socket.on('get-answer', room => {
     io.to(room).emit('game-finish', req.user);
