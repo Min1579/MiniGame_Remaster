@@ -23,8 +23,7 @@ var ballArr = [];
 
 function init() {
   const name = document.querySelector('#user').innerHTML;
-  getScore('http://localhost:3000/dodge/getScore',name);
-  getEmail('http://localhost:3000/dodge/getEmail',name);
+  getScore(`http://${window.location.hostname}:${window.location.port}/dodge/getScore`,name);
   imgPlane.src = "../images/dodge/plane.png"
   document.querySelector('#msg').innerHTML = 'Enjoy!'
   ctx.clearRect(0, 0, 600, 400);
@@ -112,7 +111,7 @@ function drawPlane(plane) {
     else if (e.keyCode == 37) {
       plane.xcnt = 0;
     }
-    else if (e.keyCode == 40) {
+    if (e.keyCode == 40) {
       plane.ycnt = 0;
     }
     else if (e.keyCode == 38) {
@@ -169,10 +168,10 @@ function drawBall(plane, ball) {
         }
         else {
           if (highScore == 0){
-            insertScore("http://localhost:3000/dodge/insertScore",email, name, score);
+            insertScore(`http://${window.location.hostname}:${window.location.port}/dodge/insertScore`,email, name, score);
           }
           else if (highScore < score){
-            updateScore("http://localhost:3000/dodge/updateScore",email, score);
+            updateScore(`http://${window.location.hostname}:${window.location.port}/dodge/updateScore`,email, score);
           }
           else{
             document.querySelector('#msg').innerHTML = "Try again";
@@ -185,7 +184,6 @@ function drawBall(plane, ball) {
   }
 }
 
-
 function getScore(url,name){
   var data = JSON.stringify({'name':name});
   var xhr = new XMLHttpRequest(); 
@@ -195,20 +193,8 @@ function getScore(url,name){
 
   xhr.addEventListener("load", function () {
     var getData = JSON.parse(xhr.responseText);
-    document.querySelector('#highScore').innerHTML = getData.score;
-  })
-}
-
-function getEmail(url,name){
-  var data = JSON.stringify({'name':name});
-  var xhr = new XMLHttpRequest(); 
-  xhr.open('POST', url);
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(data);
-
-  xhr.addEventListener("load", function () {
-    var getData = JSON.parse(xhr.responseText);
     document.querySelector('#email').innerHTML = getData.email;
+    document.querySelector('#highScore').innerHTML = getData.score;
   })
 }
 
