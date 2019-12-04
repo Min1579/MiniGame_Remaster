@@ -81,8 +81,9 @@ app.use('/', indexRouter);
 const rooms = {}
 
 app.get('/cmm', (req, res) => {
+  if(!req.user) res.redirect('/login')
   res.render('catchMind/main', {
-    rooms: rooms
+    rooms: rooms, name: req.user
   })
 })
 
@@ -106,7 +107,8 @@ app.get('/:room', (req, res) => {
   }
 
   res.render('catchMind/room', {
-    roomName: req.params.room
+    roomName: req.params.room,
+    name : req.user
   })
 })
 

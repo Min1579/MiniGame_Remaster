@@ -50,26 +50,25 @@ passport.use('local-join', new LocalStrategy({
                 console.log('this email is being used');
                 connection.release();
                 return done(null,false,{message : `${email} is being used`});
-            } 
+            }
+            pool.getConnection((err,connection) => {
+                connection.query('select name from user where email = ?',[req.body.name], (err,rows) => {
+                    if(err) throw err;
+                    if(rows.length > 0) {
+                        console.log('this name  is being used');
+                        connection.release();
+                        return done(null,false,{message : `${req.body.name} is being used`});
+                    } 
+                    pool.getConnection((err,connection) => {
+                        connection.query(`insert into user set ?`,[user], (err,rows) => {
+                            connection.release();
+                            return done(null, user.name);
+                        })
+                    })
+                })
+            }) 
         })
     })
-    pool.getConnection((err,connection) => {
-        connection.query('select name from user where email = ?',[req.body.name], (err,rows) => {
-            if(err) throw err;
-            if(rows.length > 0) {
-                console.log('this name  is being used');
-                connection.release();
-                return done(null,false,{message : `${req.body.name} is being used`});
-            } 
-        })
-    })
-    pool.getConnection((err,connection) => {
-        connection.query(`insert into user set ?`,[user], (err,rows) => {
-            connection.release();
-            return done(null, user.name);
-        })
-    })
-    
 }));
 
 

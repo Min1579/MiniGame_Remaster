@@ -89,7 +89,7 @@ router.post('/update', (req, res) => {
 
     pool.getConnection((err, rows) => {
         if (err) throw err;
-        connection.query(`update board set title=${title},content=${content}, postdate=${postdate} where no=${no}`, (err, rows) => {
+        connection.query(`update board set title='${title}',content='${content}', postdate='${postdate}' where no='${no}'`, (err, rows) => {
             if (err) throw err;
             connection.release();
         })
@@ -128,7 +128,7 @@ router.get('/delete_reply', (req, res) => {
     }
     pool.getConnection((err, connection) => {
         if (err) throw err;
-        connection.query(`delete from reply where no=${no} and name=${req.user}`, (err, rows) => {
+        connection.query(`delete from reply where no='${no}' and name='${req.user}'`, (err, rows) => {
             connection.release();
             res.redirect(`/board/b?no=${req.query.origin_no}`)
         })
@@ -136,72 +136,68 @@ router.get('/delete_reply', (req, res) => {
 })
 
 router.post('/post_reply', (req, res) => {
-    const body = req.body;
-    const r = {
-        ref: body.ref,
-        r_content: body.r_content,
-        postdate: (new Date()).toDateString(),
-        name: req.user
-    };
-    console.log(r);
-
     pool.getConnection((err, connection) => {
+        const body = req.body;
+        const r = {
+            ref: body.ref,
+            r_content: body.r_content,
+            postdate: (new Date()).toDateString(),
+            name: req.user
+        };
+        console.log(r);
         if (err) throw err;
-        connection.query(`insert into reply set ${r}`, (err, rows) => {
+        connection.query(`insert into reply set ?`, [r], (err, rows) => {
             console.log('reply inserted');
             connection.release()
-            res.redirect(`/board/b?no=${req.body.ref}`)
         })
+        res.redirect(`/board/b?no=${req.body.ref}`)
     });
 });
 
 router.get('/b', (req, res) => {
+    const no = req.query.no || req.params.no
     pool.getConnection((err, connection) => {
-        connection.query('update board set view=view+1 where no = ?', [req.query.no || req.body.no], (err, rows) => {
+        connection.query('update board set view=view+1 where no = ?', [no], (err, rows) => {
             console.log('view updated!');
             connection.release();
         })
     });
-
     const p = {};
     pool.getConnection((err, connection) => {
-        connection.query('select * from board where no = ?', [req.query.no || req.body.no], (err, rows) => {
-            if (err) throw err;
-            if (rows[0]) {
-                if (rows[0]) {
-                    p.no = req.query.no || req.body.no;
-                    p.title = rows[0].title;
-                    p.name = rows[0].name;
-                    p.postdate = rows[0].postdate;
-                    p.content = rows[0].content;
-                }
-            }
-            connection.release();
-        })
-    });
-    const replies = [];
-    pool.getConnection((err, connection) => {
-        connection.query('select * from reply where ref = ? order by no asc', [req.body.no || req.body.no], (err, rows) => {
-            rows.forEach(row => {
-                const r = {
-                    no: row.no,
-                    name: row.name,
-                    r_content: row.r_content,
-                    postdate: row.postdate,
-                }
-                console.log(r);
-                replies.push(r);
-                console.log(replies);
-            })
+        if (err) throw err;
+        connection.query('select * from board where no = ?', [no], (err, rows) => {
+            p.no = req.query.no || req.body.no
+            p.title = rows[0].title;
+            p.name = rows[0].name;
+            p.postdate = rows[0].postdate;
+            p.content = rows[0].content;
             connection.release();
         })
     })
-
+    const replies = [];
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query('select * from reply where ref = ?', [no], (err, rows) => {
+            if (rows.length > 0) {
+                rows.forEach(row => {
+                    const r = {}
+                    r.name = row.name,
+                    r.postdate = row.postdate
+                    r.no = row.no;
+                    r.r_content = row.r_content;
+                    replies.push(r);
+                })
+            }
+            connection.release();
+        })
+    })
+    console.log('################',p,'################',replies)
     res.render('board/post', {
-        'p': p,
-        'replies': replies
+        p: p,
+        replies: replies
     });
-})
+});
+
 
 
 module.exports = router;
