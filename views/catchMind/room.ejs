@@ -9,6 +9,7 @@
   <script>
     const roomName = "<%= roomName %>"
     const name = "<%= name %>"
+
   </script>
   <script defer src="/socket.io/socket.io.js"></script>
   <script defer src="javascripts/script.js"></script>
@@ -22,13 +23,14 @@
     }
 
     #message-container {
-
-      overflow-y: scroll;
       height: 150px;
+      overflow: auto;
+      background-color: whitesmoke;
     }
 
     ul.list-group {
       overflow-y: scroll;
+      max-height: 600px;
     }
   </style>
 </head>
@@ -86,24 +88,20 @@
         <button type="submit" id="send-button" class="btn btn-default">Send</button>
       </form>
     </div>
-
     <footer>
       <% include ../footer %>
     </footer>
   </div>
 
   <script>
-    document.querySelector('#message-container').addEventListener('wheel', function (e) {
-      if (e.wheelDelta < 0) {
-        if ((this.scrollHeight - this.scrollTop - 200) <= 0) {
-          e.preventDefault();
-        }
-      }
-      else
-        if (this.scrollTop == 0) {
-          e.preventDefault();
-        }
-    }, false);
+    const send = document.querySelector("#send-button");
+    send.addEventListener('click', (e) => {
+      const msgBox = document.querySelector("#message-container");
+      msgBox.scrollTop = msgBox.scrollHeight;
+    })
+
+
+
   </script>
 </body>
 
