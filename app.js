@@ -67,7 +67,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //routing
-app.use('/cmm', cmmRouter);
+app.use('/catchmymind', cmmRouter);
 app.use('/mypage', mypageRouter);
 app.use('/board', userBoardRouter);
 app.use('/rank', rankBoardRouter)
@@ -171,9 +171,10 @@ io.on('connection', socket => {
   socket.on('game-start', (room, answer) => {
     socket.to(room).broadcast.emit('prevent-pointer');
     socket.to(room).broadcast.emit('send-answer', answer);
+    io.socket(room).emit('game-start-status');
   })
   socket.on('get-answer', room => {
-    io.to(room).emit('game-finish');
+    io.to(room).emit('game-finish', req.user);
     /* db저장*/
   })
 })
@@ -186,7 +187,6 @@ function getUserRooms(socket) {
   }, [])
 }
 /**    Socket end  */
-//dodge
 
 
 
