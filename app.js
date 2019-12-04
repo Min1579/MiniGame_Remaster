@@ -1,6 +1,7 @@
 const http = require('http');
 const createError = require('http-errors');
 const express = require('express');
+const debug = require('debug')('minigames:server');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -11,7 +12,6 @@ const flash = require('connect-flash');
 const session = require('express-session');
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 const registerRouter = require('./routes/register');
 const loginRouter = require('./routes/login');
 const rankBoardRouter = require('./routes/rankBoard');
@@ -26,8 +26,13 @@ const server = http.createServer(app);
 
 const io = require('socket.io')(server);
 
-const  port = process.env.PORT || 3000;
+const port = normalizePort(process.env.PORT || 3000);
+app.set('port', port);
+
 server.listen(port);
+
+server.on('error', onError);
+server.on('listening', onListening);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,7 +55,9 @@ app.use(flash());
 app.use(logger('dev'));
 //body-parser
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 //cookie-parser
 app.use(cookieParser());
@@ -61,12 +68,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //routing
 app.use('/mypage', mypageRouter);
-app.use('/users', usersRouter);
 app.use('/board', userBoardRouter);
 app.use('/rank', rankBoardRouter)
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
-app.use('/dodge',dodgeRouter);
+app.use('/dodge', dodgeRouter);
 app.use('/desertwar', desertRouter)
 app.use('/', indexRouter);
 
@@ -105,14 +111,17 @@ app.get('/:room', (req, res) => {
 })
 
 io.on('connection', socket => {
-
   socket.on('new-user', (room, name) => {
     socket.join(room)
     rooms[room].users[socket.id] = name
-    socket.to(room).broadcast.emit('user-connected', name)
+    const nameList = [];
+    for (let key in rooms[room].users) {
+      nameList.push(rooms[room].users[key])
+    }
+    io.to(room).emit('user-connected', name);
+    io.to(room).emit('update-userlist', nameList);
   })
   socket.on('send-chat-message', (room, message) => {
-
     socket.to(room).broadcast.emit('chat-message', {
       message: message,
       name: rooms[room].users[socket.id]
@@ -122,6 +131,11 @@ io.on('connection', socket => {
     getUserRooms(socket).forEach(room => {
       socket.to(room).broadcast.emit('user-disconnected', rooms[room].users[socket.id])
       delete rooms[room].users[socket.id]
+      const nameList = []
+      for (let key in rooms[room].users) {
+        nameList.push(rooms[room].users[key])
+      }
+      io.to(room).emit('update-userlist', nameList);
     })
   })
   /**
@@ -130,6 +144,12 @@ io.on('connection', socket => {
 
   socket.on('send-mousemove', (room, x, y) => {
     socket.to(room).broadcast.emit('receive-mousemove', x, y);
+  })
+  socket.on('send-mousedown', (room, x, y, drawing) => {
+    socket.to(room).broadcast.emit('receive-mousedown', x, y, drawing);
+  })
+  socket.on('send-mouseup', (room) => {
+    socket.to(room).broadcast.emit('receive-mouseup');
   })
   socket.on('send-color', (room, color) => {
     socket.to(room).broadcast.emit('receive-color', color);
@@ -140,21 +160,21 @@ io.on('connection', socket => {
   socket.on('send-clear', (room, w, h) => {
     socket.to(room).broadcast.emit('receive-clear', w, h);
   })
-  /*
-  socket.on('send-mousedown',(room,x,y,drawing) =>{
-    socket.to(room).broadcast.emit('receive-mousedown', x,y,drawing);
-  })
-  socket.on('send-mouseup',(room,drawing) => {
-    socket.to(room).broadcast.emit('receive-mouseup',drawing);
-  })  
-  */
-  socket.on('game-start', (room, answer) => {
-    socket.to(room).broadcast.emit('prevent-pointer');
-    socket.to(room).broadcast.emit('reset-canvas');
-    socket.to(room).broadcast.emit('send-answer', answer);
+  socket.on('send-clear-all', (room, w, h) => {
+    io.to(room).emit('receive-clear', w, h);
   })
 
+
+  socket.on('game-start', (room, answer) => {
+    socket.to(room).broadcast.emit('prevent-pointer');
+    socket.to(room).broadcast.emit('send-answer', answer);
+  })
+  socket.on('get-answer', room => {
+    io.to(room).emit('game-finish');
+    /* db저장*/
+  })
 })
+
 
 function getUserRooms(socket) {
   return Object.entries(rooms).reduce((names, [name, room]) => {
@@ -184,4 +204,59 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
-module.exports = app;
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  const bind = typeof port === 'string' ?
+    'Pipe ' + port :
+    'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  const addr = server.address();
+  const bind = typeof addr === 'string' ?
+    'pipe ' + addr :
+    'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

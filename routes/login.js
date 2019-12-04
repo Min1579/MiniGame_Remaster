@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const LocalStrategy= require('passport-local').Strategy;
-const connection = require('../config/database');
+const pool = require('../config/database');
 const session = require('express-session')
+const mysql = require('mysql2');
 
 router.get('/', (req,res) => {
     //flash message
@@ -34,9 +35,9 @@ passport.use('local-login', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'pwd',
     passReqToCallback: true
-}, async (req, email, pwd, done) => {
+}, (req, email, pwd, done) => {
     console.log('local-login callback called!');
-    const query = connection.query('select email,pwd,name from user where email=? and pwd = ? ', [email, pwd] , (err, rows) => {
+    pool.query(`select email,pwd,name from user where email=? and pwd = ?`,[email,pwd], (err, rows) => {
         if(err) return done(err);
         if(rows.length){
             console.log('result : ', email, rows[0].name);

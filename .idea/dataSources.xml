@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="minigame@localhost" uuid="b10bbfb6-26d2-41f7-a40a-f2d634b25c25">
+    <data-source source="LOCAL" name="@us-cdbr-iron-east-05.cleardb.net" uuid="c3a7e703-71f2-4c59-8fde-33f2743bbce0">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/minigame</jdbc-url>
-      <driver-properties>
-        <property name="serverTimezone" value="Asia/Seoul" />
-      </driver-properties>
+      <jdbc-url>jdbc:mysql://us-cdbr-iron-east-05.cleardb.net:3306/</jdbc-url>
     </data-source>
   </component>
 </project>
