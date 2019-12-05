@@ -40,14 +40,14 @@ inputAnswer.addEventListener('keyup', () => {
     const inputAnswerVal = inputAnswer.value;
     if (inputAnswerVal.length > 0) {
         if (ANSWER == inputAnswer.value) {
-            socket.emit('get-answer', roomName);
+            socket.emit('get-answer', roomName, name);
             addPoint(`https://${window.location.hostname}:${window.location.port}/catchmymind/ajax`)
         }
     }
 });
 
-socket.on('game-finish', name => {
-    alert(`${name}님이 정답을 맞추었습니다\n정답공개:${ANSWER}`)
+socket.on('game-finish', matchuser => {
+    alert(`${matchuser}님이 정답을 맞추었습니다\n정답공개:${ANSWER}`)
     document.querySelector("#canvas").style['pointer-events'] = "auto";
     startBtn.removeAttribute('disabled')
     clearBtn.removeAttribute('disabled');
