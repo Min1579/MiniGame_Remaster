@@ -30,11 +30,14 @@ router.get('/checkID',(req,res)=>{
             if (err) throw err;
             if (rows[0]){
                 resData.msg = "Exist!";
+                console.log("Not Good");
             }
             else {
                 resData.msg = "OK";
+                console.log("OK");
             }
             res.json(resData);
+            connection.release();
         });
     });
 });
@@ -48,11 +51,14 @@ router.get('/checkName',(req,res)=>{
             if (err) throw err;
             if (rows[0]){
                 resData.msg = "Exist!";
+                console.log("Not Good");
             }
             else {
                 resData.msg = "OK";
+                console.log("OK");
             }
             res.json(resData);
+            connection.release();
         });
     });
 });

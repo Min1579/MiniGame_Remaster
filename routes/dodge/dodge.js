@@ -13,16 +13,6 @@ router.post('/getScore',(req,res)=>{
     resData = {};
     console.log("name : " ,name);
     pool.getConnection((err,connection)=>{
-        connection.query('select score from dodge where name=?',name,(err,rows)=>{
-            if (err) throw error;
-            if (rows[0]){
-                resData.score = rows[0].score;
-            }
-            else {
-                resData.score = 0;
-            }
-            connection.release();
-        })
         connection.query('select email from user where name=?',name,(err,rows)=>{
             if (err) throw error;
             if (rows[0]){
@@ -31,11 +21,21 @@ router.post('/getScore',(req,res)=>{
             else {
                 resData.email = "Guest@Guest";
             }
+            connection.release();
+        });
+        connection.query('select score from dodge where name=?',name,(err,rows)=>{
+            if (err) throw error;
+            if (rows[0]){
+                resData.score = rows[0].score;
+            }
+            else {
+                resData.score = 0;
+            }
             console.log(resData);
             res.json(resData);
             connection.release();
-        })
-    })
+        });
+    });
 });
 
 router.post('/updateScore',(req,res)=>{
