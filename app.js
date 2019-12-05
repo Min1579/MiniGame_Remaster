@@ -174,7 +174,7 @@ io.on('connection', socket => {
     io.to(room).emit('game-start-status');
   })
   socket.on('get-answer', room => {
-    io.to(room).emit('game-finish', req.user);
+    io.to(room).emit('game-finish', name);
     /* db저장*/
   })
 })
