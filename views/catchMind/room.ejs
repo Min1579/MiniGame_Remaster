@@ -8,21 +8,33 @@
   <title>Chat App</title>
   <script>
     const roomName = "<%= roomName %>"
+    const name = "<%= name %>"
+
   </script>
-  <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script defer src="/socket.io/socket.io.js"></script>
   <script defer src="javascripts/script.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <script defer src="javascripts/sketch.js"></script>
   <script defer src="javascripts/gameProc.js"></script>
-</head>
-<style>
-  #canvas {
-    border: 5px solid black;
-    border-radius: 50px 50px;
-    
-  }
+  <style>
+    #canvas {
+      border: 5px solid black;
+      border-radius: 50px 50px;
+    }
 
-</style>
+    #message-container {
+      height: 150px;
+      overflow: auto;
+      background-color: whitesmoke;
+    }
+
+    ul.list-group {
+      overflow-y: scroll;
+      max-height: 600px;
+    }
+  </style>
+</head>
+
 
 <body>
   <header>
@@ -47,27 +59,50 @@
           <option value="15">굵게</option>
         </select>
       </div>
+
       <div class="col-xs-2">
-          <input id="answer" type="text" class="form-control" placeholder="정답입력" required>
+        <input id="answer" type="text" class="form-control" placeholder="정답입력" required>
       </div>
-      <div class="col-xs-2" id="result"></div>
+      <h4 class="col-xs-2" id="status"></h4>
       <button class="btn btn-default pull-right" id="clear">CLEAR CANVAS</button>
       <button class="btn btn-default btn-primary pull-right" id="startBtn">GAME START</button>
     </div>
     <br>
-    <canvas id="canvas" width="1140" height="600"></canvas>
+    <div class="rows show-grid container">
+      <div class="col-xs-2">
+        <p class="lead">USER LIST</p>
+        <ul class="list-group">
+        </ul>
+      </div>
+      <div>
+        <canvas id="canvas" class="col-xs-10" width="1140" height="600"></canvas>
+      </div>
+
+    </div>
+
     <br><br>
     <div class="jumbotron">
       <div id="message-container"></div>
       <form id="send-container">
-        <input type="text" id="message-input">
-        <button type="submit" id="send-button">Send</button>
+        <input type="text" id="message-input" class="form-control">
+        <button type="submit" id="send-button" class="btn btn-default">Send</button>
       </form>
     </div>
-
     <footer>
       <% include ../footer %>
     </footer>
   </div>
+
+  <script>
+    const send = document.querySelector("#send-button");
+    send.addEventListener('click', (e) => {
+      const msgBox = document.querySelector("#message-container");
+      msgBox.scrollTop = msgBox.scrollHeight;
+    })
+
+
+
+  </script>
 </body>
+
 </html>

@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-//const bcrypt = require('bcrypt');
 const passport = require('passport');
 const LocalStrategy= require('passport-local').Strategy;
-const connection = require('../config/database');
+const pool = require('../config/database');
+const mysql = require('mysql2');
 
 
 /* local-join 회원가입 */ 
@@ -19,6 +19,43 @@ router.post('/' ,passport.authenticate('local-join', {
     failureRedirect: '/register',
     failureFlash: true
 }));
+//아이디 체크
+// router.get('/checkID',(req,res)=>{
+//     const id = req.query.id;
+//     console.log(id);
+
+//     resData = {};
+//     pool.getConnection((err,connection)=>{
+//         connection.query("select email from user where email = ?", id, (err,rows)=>{
+//             if (err) throw err;
+//             if (rows[0]){
+//                 resData.msg = "Exist!";
+//             }
+//             else {
+//                 resData.msg = "OK";
+//             }
+//             res.json(resData);
+//         });
+//     });
+// });
+// router.get('/checkName',(req,res)=>{
+//     const name = req.query.name;
+//     console.log(name);
+
+//     resData = {};
+//     pool.getConnection((err,connection)=>{
+//         connection.query("select name from user where name = ?", name, (err,rows)=>{
+//             if (err) throw err;
+//             if (rows[0]){
+//                 resData.msg = "Exist!";
+//             }
+//             else {
+//                 resData.msg = "OK";
+//             }
+//             res.json(resData);
+//         });
+//     });
+// });
 
 passport.serializeUser((user, done) => {
     console.log('serialized');
@@ -37,32 +74,37 @@ passport.use('local-join', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'pwd',
     passReqToCallback: true
-}, async (req, email, pwd, done) => {
-    console.log('local-join callback called!');
-    const query = connection.query('select email from user where email =?', [email], (err, rows) => {
-        if (err) done(err); // done 비동기 처리 
-        if (rows.length > 0) {
-            console.log(`${email} is already in use`);
-            return done(null, false, {message : `${email} is already in use`}); //두번쨰 false -> failure Redirect , message -> flash
-        } else {
-            const query = connection.query('select name from user where name = ?', [req.body.name],  async (err, rows) => {
-                if (err) done(err);
-                if(rows.length) {
-                    return done(null, false, {message: `${req.body.name} is already in use`});
-                } else {
-                    const user = {
-                        email:email, 
-                        pwd: pwd,
-                        name:req.body.name
-                    }
-                    const query = connection.query('insert into user set ?' , user, (err,rows) => {
-                        console.log(user);
-                        console.log('user added!');
-                        return done(null, user.email);
-                    });
-                }
-            })
-        }
+}, (req, email, pwd, done) => {
+    const user = {
+        email:email,
+        pwd:pwd,
+        name: req.body.name
+    };
+    pool.getConnection((err,connection) => {
+        connection.query('select email from user where email = ?',[email], (err,rows) => {
+            if(err) throw err;
+            if(rows.length > 0) {
+                console.log('this email is being used');
+                connection.release();
+                return done(null,false,{message : `${email} is being used`});
+            }
+            pool.getConnection((err,connection) => {
+                connection.query('select name from user where email = ?',[req.body.name], (err,rows) => {
+                    if(err) throw err;
+                    if(rows.length > 0) {
+                        console.log('this name  is being used');
+                        connection.release();
+                        return done(null,false,{message : `${req.body.name} is being used`});
+                    } 
+                    pool.getConnection((err,connection) => {
+                        connection.query(`insert into user set ?`,[user], (err,rows) => {
+                            connection.release();
+                            return done(null, user.name);
+                        })
+                    })
+                })
+            }) 
+        })
     })
 }));
 

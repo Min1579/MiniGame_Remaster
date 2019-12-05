@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>MiniGames</title>
-  <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script defer src="/socket.io/socket.io.js"></script>
   <script defer src="javascripts/script.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 </head>
@@ -17,27 +17,37 @@
   </header>
   <div class="container">
     <div class="jumbotron">
+      <h2> HI! <%= name %></h2>
+      <br>
+      <h3>How to Play?</h3>
+      <br>
+      <p>1. Create a room or Join a room from the room list </p>
+      <p>2. Chat with users and decide who will draw!</p>
+      <p>3. If you wannt draw a picture, write down answer in form and click the GAME START button</p>
+      <p>4. You can select the thickness and color while drawing</p>
+      <p>5. If you are in position to guess the picture, guess with users, and enter the answer in form</p>
       <form action="/room" method="POST">
-        <input name="room" type="text" required>
-        <button type="submit">New Room</button>
+        <input class="form-contrl col-xm-2" name="room" type="text" placeholder="room name" required>
+        <button class="btn" type="submit">New Room</button>
       </form>
     </div>
-    <table class="table">
+    <table class="table table-hover">
       <thead>
         <th>#</th>
-        <th>방 제목</th>
-        <th>입장하기</th>
+        <th>ROOM NAME</th>
+        <th>JOIN</th>
       </thead>
       <div id="room-container">
         <% Object.keys(rooms).forEach((room,idx) => { %>
         <tr>
-          <td><%= idx + 1 %></td>
-          <td><%= room %></td>
-          <td><a href="/<%= room %>">Join</a></td>
+          <td><strong><%= idx + 1 %></strong></td>
+          <td><strong><%= room %></strong></td>
+          <td><a class="btn btn-default btn-primary" href="/<%= room %>">Join</a></td>
         </tr>
         <% }) %>
       </div>
     </table>
+
     <footer>
       <% include ../footer %>
     </footer>
