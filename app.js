@@ -67,6 +67,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //routing
+app.use('/', indexRouter);
 app.use('/catchmymind', cmmRouter);
 app.use('/mypage', mypageRouter);
 app.use('/board', userBoardRouter);
@@ -75,7 +76,7 @@ app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/dodge', dodgeRouter);
 app.use('/desertwar', desertRouter)
-app.use('/', indexRouter);
+
 
 
 // socket control (Dont touch)
@@ -104,7 +105,6 @@ app.post('/room', (req, res) => {
 
 app.get('/:room', (req, res) => {
   if (rooms[req.params.room] == null) {
-    return res.redirect('/cmm')
   }
 
   res.render('catchMind/room', {
@@ -174,7 +174,7 @@ io.on('connection', socket => {
     io.to(room).emit('game-start-status');
   })
   socket.on('get-answer', room => {
-    io.to(room).emit('game-finish', req.user);
+    io.to(room).emit('game-finish', name);
     /* db저장*/
   })
 })
