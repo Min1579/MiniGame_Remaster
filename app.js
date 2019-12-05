@@ -173,8 +173,8 @@ io.on('connection', socket => {
     socket.to(room).broadcast.emit('send-answer', answer);
     io.to(room).emit('game-start-status');
   })
-  socket.on('get-answer', room, name => {
-    io.to(room).emit('game-finish', name);
+  socket.on('get-answer', room=> {
+    io.to(room).emit('game-finish', req.user);
     /* db저장*/
   })
 })

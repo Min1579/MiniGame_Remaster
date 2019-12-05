@@ -40,7 +40,7 @@ inputAnswer.addEventListener('keyup', () => {
     const inputAnswerVal = inputAnswer.value;
     if (inputAnswerVal.length > 0) {
         if (ANSWER == inputAnswer.value) {
-            socket.emit('get-answer', roomName, name);
+            socket.emit('get-answer', roomName);
             addPoint(`https://${window.location.hostname}:${window.location.port}/catchmymind/ajax`)
         }
     }
