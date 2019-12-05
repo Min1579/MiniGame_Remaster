@@ -55,13 +55,11 @@
                         <input type="password" class="form-control" id="inputRePassword" placeholder="비밀번호를 다시 입력하세요">
                         <div id="pwdCheck"></div>
                     </div>
-
                 </div>
-
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="reset" class="btn btn-default btn-lg">Reset</button>
-                        <button type="submit" class="btn btn-default btn-lg">Sign in</button>
+                        <button type="submit" class="btn btn-default btn-lg" id="sign">Sign in</button>
                     </div>
                 </div>
             </form>
@@ -69,6 +67,70 @@
 
         <% include ../footer.ejs %>
     </div>
+    <script>
+        document.querySelector("#inputRePassword").addEventListener("keyup", function () {
+            const pwd = document.querySelector("#inputPassword").value;
+            const pwd1 = document.querySelector("#inputRePassword").value;
+            if (pwd === pwd1) {
+                document.querySelector("#pwdCheck").style.color = 'blue';
+                document.querySelector("#pwdCheck").innerHTML = "패스워드가 같습니다. 계속해주세요";
+                document.querySelector("#sign").disabled = false;
+            }
+            else {
+                document.querySelector("#pwdCheck").style.color = 'red';
+                document.querySelector("#pwdCheck").innerHTML = "패스워드가 다릅니다";
+                document.querySelector("#sign").disabled = true;
+            }
+        });
+        document.querySelector("#inputID").addEventListener("keyup", function () {
+            const id = document.querySelector("#inputID").value;
+            checkID(`http://${window.location.hostname}:${window.location.port}/register/checkID?id=${id}`);
+
+        });
+        document.querySelector("#inputName").addEventListener("keyup", function () {
+            const name = document.querySelector("#inputName").value;
+            checkID(`http://${window.location.hostname}:${window.location.port}/register/checkName?name=${name}`);
+        });
+        function checkID(url, id) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET',url);
+            xhr.send();
+
+            xhr.addEventListener("load",function(){
+                const data = JSON.parse(xhr.responseText);
+                if (data.check= "OK") {
+                document.querySelector("#pwdCheck").style.color = 'blue';
+                document.querySelector("#pwdCheck").innerHTML = "아이디가 사용가능합니다";
+                document.querySelector("#sign").disabled = false;
+                }
+                else {
+                document.querySelector("#pwdCheck").style.color = 'red';
+                document.querySelector("#pwdCheck").innerHTML = "아이디가 이미 존재합니다";
+                document.querySelector("#sign").disabled = true;
+                }
+            })
+
+        };
+        function checkName(url, name) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET',url);
+            xhr.send();
+
+            xhr.addEventListener("load",function(){
+                const data = JSON.parse(xhr.responseText);
+                if (data.check= "OK") {
+                document.querySelector("#pwdCheck").style.color = 'blue';
+                document.querySelector("#pwdCheck").innerHTML = "닉네임이 사용가능합니다.";
+                document.querySelector("#sign").disabled = false;
+                }
+                else {
+                document.querySelector("#pwdCheck").style.color = 'red';
+                document.querySelector("#pwdCheck").innerHTML = "닉네임이 이미 존재합니다";
+                document.querySelector("#sign").disabled = true;
+                }
+            })
+        };
+    </script>
 </body>
 
 </html>
