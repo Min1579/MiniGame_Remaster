@@ -42,3 +42,11 @@ create table dodge(
     foreign key(email) references user(email) 
     on delete cascade
 );
+// 데저트워 게임 테이블
+create table desertwar(
+    email    varchar(50) not null,
+    name     varchar(50) not null,
+    score    int not null,
+    foreign key(email) references user(email) 
+    on delete cascade
+);

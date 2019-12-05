@@ -19,6 +19,43 @@ router.post('/' ,passport.authenticate('local-join', {
     failureRedirect: '/register',
     failureFlash: true
 }));
+//아이디 체크
+// router.get('/checkID',(req,res)=>{
+//     const id = req.query.id;
+//     console.log(id);
+
+//     resData = {};
+//     pool.getConnection((err,connection)=>{
+//         connection.query("select email from user where email = ?", id, (err,rows)=>{
+//             if (err) throw err;
+//             if (rows[0]){
+//                 resData.msg = "Exist!";
+//             }
+//             else {
+//                 resData.msg = "OK";
+//             }
+//             res.json(resData);
+//         });
+//     });
+// });
+// router.get('/checkName',(req,res)=>{
+//     const name = req.query.name;
+//     console.log(name);
+
+//     resData = {};
+//     pool.getConnection((err,connection)=>{
+//         connection.query("select name from user where name = ?", name, (err,rows)=>{
+//             if (err) throw err;
+//             if (rows[0]){
+//                 resData.msg = "Exist!";
+//             }
+//             else {
+//                 resData.msg = "OK";
+//             }
+//             res.json(resData);
+//         });
+//     });
+// });
 
 passport.serializeUser((user, done) => {
     console.log('serialized');
