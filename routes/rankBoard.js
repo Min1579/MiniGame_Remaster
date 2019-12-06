@@ -20,15 +20,16 @@ router.get('/catchMyMind', (req,res) => {
     })
 })
 
-router.get('/', (req,res) => {
-    pool.getConnection((err,connection) => {
-        connection.query('select * from board order by point desc', (err,rows) =>{
-            const result = rows;
-            connection.release();
-            res.render('rank/main',{rows:result});
-        })
+router.get('/dodge', (req,res) => {
+    pool.getConnection((err,conn)=> {
+        if(!err) {
+            
+        }
     })
-    //res.render('rank/main');
+})
+
+router.get('/', (req,res) => {
+    res.render('rank/main');
 })
 
 

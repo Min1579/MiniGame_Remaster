@@ -1,4 +1,4 @@
-const socket = io(`https://${window.location.hostname}:${window.location.port}`);
+const socket = io(`${window.location.href}:${window.location.port}`);
 const messageContainer = document.getElementById('message-container')
 const roomContainer = document.getElementById('room-container')
 const messageForm = document.getElementById('send-container')
