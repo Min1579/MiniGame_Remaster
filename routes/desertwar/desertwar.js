@@ -13,6 +13,7 @@ router.post('/sendScore',(req,res)=> {
       const query = connection.query('insert into desertwar values(?,?,?)',["1233@1233","1233",score],(err,rows)=>{
             if (err) throw error;
             res.json(resData);
+            
       })
 })
 module.exports = router;

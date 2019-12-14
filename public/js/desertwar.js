@@ -316,6 +316,19 @@ function fire() {
         makeMissile();
     }
 }
+function sendScore(url, score){
+    var data = JSON.stringify({'score': score});
+    var xhr = new XMLHttpRequest(); 
+    xhr.open('POST', url);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(data);
+  
+    xhr.addEventListener("load", function () {
+      //var getData = JSON.parse(xhr.responseText);
+      //document.querySelector('#msg').innerHTML = getData.msg;
+      //document.querySelector('#highScore').innerHTML = score;
+    })
+}
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 function keyDownHandler(e) {
