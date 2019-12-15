@@ -37,7 +37,8 @@ var gameover = 0;
 var Mode = 1;
 const MODE_GAME = 1;
 const MODE_OVER = 2;
-
+var pilotDie = false;
+var user;
 var score = 0;
 var level = 1;
 var lvlsec = 0;
@@ -106,7 +107,8 @@ function enemy_speed() {
 var mvp;
 var levelup;
 function init() {
-    //if(running == false){
+    const name = document.querySelector('#user').innerHTML;
+    getScore(`http://${window.location.hostname}:${window.location.port}/desertwar/getScore`,name);
     desert_init();
     pilot_init();
     enemy_init();
@@ -118,14 +120,12 @@ function init() {
     running = true;
     document.getElementById('play_btn').outerHTML = '<button id="play_btn" onclick="Game()" >Play!</button>';
     Game();
-    // }
 }
 
 function restart() {
     var btn = document.createElement('button');
     document.querySelector('#overlay').appendChild(btn);
     document.querySelector('button').outerHTML = '<button class="btn btn-default" id="play_btn" onclick="init()" >Restart!</button>';
-
 }
 function Game() {
     document.querySelector("#play_btn").outerHTML = ''
@@ -137,8 +137,8 @@ function Game() {
             
             ctx.font = ("20px Arial bold");
             ctx.fillStyle = "blue";
-            ctx.fillText("SCORE : " + score, 5, 30);
-            ctx.fillText("LEVEL : " + level, 450, 30);
+            document.getElementById('score').innerHTML = score;
+            document.getElementById('level').innerHTML = level;
             back1X -= 5;
             back2X -= 5;
             if (back1X <= -1000) {
@@ -219,7 +219,15 @@ function Game() {
                     unitX = 50;
                     unitY = 350;
                     pilotDie = true;
-                    sendScore("http://localhost:3000/desertwar/sendScore", score);
+                    const name = document.querySelector('#user').innerHTML;
+                    const highScore = parseInt(document.querySelector('#highScore').innerText);
+                    const email = document.querySelector("#email").innerText;
+
+                    if (highScore == 0){
+                        insertScore(`http://${window.location.hostname}:${window.location.port}/desertwar/insertScore`,email, name, score);
+                    } else if (highScore < score) {
+                        updateScore(`http://${window.location.hostname}:${window.location.port}/desertwar/updateScore`,email, score);
+                    }
                 }
             }
         }, 20)
@@ -238,9 +246,9 @@ function Game() {
                 }
             }
         }, 20)
-    
     }
 }
+
 function makeMissile() {
     if (count % 8 != 0) {
         return;
@@ -316,19 +324,45 @@ function fire() {
         makeMissile();
     }
 }
-function sendScore(url, score){
-    var data = JSON.stringify({'score': score});
+       
+
+function getScore(url,name){
+    var data = JSON.stringify({'name':name});
     var xhr = new XMLHttpRequest(); 
     xhr.open('POST', url);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(data);
   
     xhr.addEventListener("load", function () {
-      //var getData = JSON.parse(xhr.responseText);
-      //document.querySelector('#msg').innerHTML = getData.msg;
-      //document.querySelector('#highScore').innerHTML = score;
+      var getData = JSON.parse(xhr.responseText);
+      document.querySelector('#email').innerHTML = getData.email;
+      document.querySelector('#highScore').innerHTML = getData.score;
     })
-}
+  }
+  function insertScore(url, email, name, score) {
+    var data = JSON.stringify({'email':email, 'name': name, 'score': score});
+    var xhr = new XMLHttpRequest(); 
+    xhr.open('POST', url);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(data);
+  
+    xhr.addEventListener("load", function () {
+      var getData = JSON.parse(xhr.responseText);
+      document.querySelector('#highScore').innerHTML = score;
+    })
+  }
+  function updateScore(url, email, score) {
+    var data = JSON.stringify({'email':email, 'score': score});
+    var xhr = new XMLHttpRequest(); 
+    xhr.open('POST', url);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(data);
+  
+    xhr.addEventListener("load", function () {
+      var getData = JSON.parse(xhr.responseText);
+      document.querySelector('#highScore').innerHTML = score;
+    })
+  }
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 function keyDownHandler(e) {

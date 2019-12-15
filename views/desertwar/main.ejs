@@ -22,6 +22,26 @@
     #container canvas, #overlay{
         position: absolute;
     }
+    .container-desert-wrapper{
+    position: relative;
+    text-align: center;
+    margin: 0 auto;
+    width: 800px;
+    padding: 0;   
+    }
+    .container-desert{
+        clear: both;
+    }
+    .item{
+        padding: 8px 0px;
+        width: 200px;
+        float: left;
+
+    }
+    .font-bigger {
+    font-size: 25px;
+    font-weight: bold;
+    }
     #foot{
         position: relative;
         top: 700px;
@@ -33,12 +53,27 @@
     <% include ../header%>
     <div id="wrapper">
     <div id="container" style="display: flex; justify-content: center;">
-    <canvas id="myCanvas" width="1000" height="700" >
-    </canvas>
+    <canvas id="myCanvas" width="1000" height="700" ></canvas>
+    <div class="container-desert-wrapper" >
+        <div class="container-desert">
+            <div class="item font-bigger">PLAYER</div>
+            <div class="item font-bigger">LEVEL</div>
+            <div class="item font-bigger">SCORE</div>
+            <div class="item font-bigger">HIGHSCORE</div>
+        </div>
+        <div class="container-desert">
+            <div class="item" id="user"><%=name%></div>
+            <div class="item" id="level">0</div>
+            <div class="item" id="score">0</div>
+            <div class="item" id="highScore">0</div>
+        </div>
+    </div>
     <div id="overlay">
             <button class="btn btn-default" id="play_btn" onclick="init()" >Play!</button>
     </div>
 </div>
+    <!-- <h1 id="msg"></h1> -->
+    <h1 id="email" hidden></h1>
     <script src="/js/desertwar.js"></script>
     <div id="foot"><% include ../footer%></div>
 </body>
