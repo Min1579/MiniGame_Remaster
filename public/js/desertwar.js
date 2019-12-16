@@ -39,6 +39,7 @@ var ctx = canvas.getContext("2d");
 
 var score = 0;
 var level = 1;
+var crazy = "CRAZY!!!"
 var lvlsec = 0;
 var enemySpeed = 5;
 
@@ -180,13 +181,36 @@ function Game() {
                     var result = Math.floor(Math.random() * 2);
                     obj.type = result;
                     if (result == 0) {
-                        obj.energy = 50;
+                        if(level >= 5) {
+                            obj.energy = 100;
+                        } else if (level >= 10){
+                            obj.energy = 200;
+                        } else {
+                            obj.energy = 50;
+                        }
                     } else if (result == 1) {
-                        obj.energy = 100;
+                        if(level >= 5) {
+                            obj.energy = 150;
+                        } else if (level >= 10) {
+                            obj.energy = 250;
+                        } else {
+                            obj.energy = 100;
+                        }
                     }
                     obj.isDead = false;
                     enemyList.push(obj);
-                    enemycount = 0;
+                    if (level < 5) {
+                        enemycount = 0;
+                        } 
+                        if (level >=5 && level < 10) {
+                            enemycount = 30;
+                        } 
+                        if (level >= 10 && level < 15) {
+                            enemycount = 40;
+                        } 
+                        if (level >= 15){
+                            enemycount = 80;
+                        }
                 }
             }
             //적기 제거
@@ -255,7 +279,7 @@ function Game() {
 } //Game(); end
 
 function makeMissile() {
-    if (count % 8 != 0) {
+    if (count % 6 != 0) {
         return;
     }
     var obj = {};
@@ -321,10 +345,12 @@ function LVLUP(){
     }
     if (level < 5) {
     enemySpeed += 0.2;
-    } else if (level >=5 && level <10) {
-        enemySpeed = Math.random() * 20 + 5;    
-    } else if (level >= 10) {
-        enemySpeed = Math.random() * 20 + 20; 
+    } if (level >=5 && level < 10) {
+        enemySpeed = Math.random() * 20 + 5;
+    } if (level >= 10 && level < 15) {
+        enemySpeed = Math.random() * 20 + 20;
+    } if (level >= 15){
+        enemySpeed = 15;
     }
 }
 function fire() {
