@@ -19,11 +19,16 @@ imgBall.src = "../images/dodge/ball.png";
 overImg.src = "../images/dodge/over.png";
 boomImg.src = "../images/dodge/boom.gif";
 
+const bgm = new Audio('../images/dodge/sounds/dodgebgm.mp3');
 const explosion = new Audio('../images/dodge/sounds/explosion.mp3');
+bgm.pause();
+bgm.loop=true;
+bgm.play();
 
 var ballArr = [];
 
 function init() {
+
   const name = document.querySelector('#user').innerHTML;
   getScore(`http://${window.location.hostname}:${window.location.port}/dodge/getScore`,name);
   imgPlane.src = "../images/dodge/plane.png"
