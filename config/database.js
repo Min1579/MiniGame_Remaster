@@ -6,7 +6,6 @@ const pool = mysql.createPool({
     // user: 'b0115c6bec9292',
     // password: 'fb148cef',
     // database: 'heroku_121397ed296abf5'
-    port : 3306,
     user : 'root',
     password : 'mypass',
     database : 'minigame'
