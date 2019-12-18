@@ -26,13 +26,13 @@
                 <th style="width: 20%">Post Date</th>
                 <th style="width: 10%;">Views</th>
             </thead>
-            <% list.forEach(b => { %>
+            <% board_list.forEach(list => { %>
             <tr>
-                <td><%= b.no %></td>
-                <td><a href="/board/b?no=<%=b.no%>"> <%= b.title %> </a></td>
-                <td><%= b.writer %></td>
-                <td><%= b.postdate %></td>
-                <td><%= b.view%></td>
+                <td><%= list.no %></td>
+                <td><a href="/board/b?no=<%=list.no%>"><%= list.title%></a></td>
+                <td><%= list.name %></td>
+                <td><%= list.postdate %></td>
+                <td><%= list.view %></td>
             </tr>
             <% }) %>
 

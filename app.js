@@ -173,17 +173,16 @@ io.on('connection', socket => {
     socket.to(room).broadcast.emit('send-answer', answer);
     io.to(room).emit('game-start-status');
   })
-  socket.on('get-answer', room=> {
-    io.to(room).emit('game-finish', req.user);
+  socket.on('get-answer', (room, name)=> {
+    io.to(room).emit('game-finish', name);
     /* db저장*/
   })
 })
 
-
 function getUserRooms(socket) {
   return Object.entries(rooms).reduce((names, [name, room]) => {
     if (room.users[socket.id] != null) names.push(name)
-    return names
+    return names;
   }, [])
 }
 /**    Socket end  */

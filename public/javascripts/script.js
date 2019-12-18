@@ -1,9 +1,10 @@
-const socket = io(`https://${window.location.hostname}:${window.location.port}`);
+const socket = io(`${window.location.href}:${window.location.port}`);
 const messageContainer = document.getElementById('message-container')
 const roomContainer = document.getElementById('room-container')
 const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
 const userList = document.querySelector('ul.list-group');
+
 
 if (messageForm != null) {
   //const name = prompt('이름을 입력하세요') //getUserName();
