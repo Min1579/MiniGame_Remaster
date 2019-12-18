@@ -52,7 +52,7 @@
                 <%  const r = replies[i]; %>
                 <tr>
                     <td><%= r.name %></td>
-                    <td><%= r.r_content %></td>
+                    <td colspan="2"><%= r.r_content %></td>
                     <td><%= r.postdate %></td>
                     <td><a href="#>">수정</a></td>
                     <td><a href="/board/delete_reply?no=<%=r.no%>&name=<%=r.name%>&origin_no=<%=p.no%>">삭제</a></td>
