@@ -46,8 +46,8 @@ inputAnswer.addEventListener('keyup', () => {
     }
 });
 
-socket.on('game-finish', name => {
-    alert(`${name}님이 정답을 맞추었습니다\n정답공개:${ANSWER}`)
+socket.on('game-finish', matchuser => {
+    alert(`${matchuser}님이 정답을 맞추었습니다\n정답공개:${ANSWER}`)
     document.querySelector("#canvas").style['pointer-events'] = "auto";
     startBtn.removeAttribute('disabled')
     clearBtn.removeAttribute('disabled');

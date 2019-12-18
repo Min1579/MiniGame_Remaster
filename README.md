@@ -15,7 +15,7 @@ create table board
     title    varchar(50) not null,
     content  text        not null,
     postdate varchar(30) not null,
-    view     int         not null,
+    view     int         not nupll,
     b_pwd    varchar(30) not null,
     foreign key(email) references user(email) 
     on delete cascade
@@ -42,6 +42,7 @@ create table dodge(
     foreign key(email) references user(email) 
     on delete cascade
 );
+
 // 데저트워 게임 테이블
 create table desertwar(
     email    varchar(50) not null,
