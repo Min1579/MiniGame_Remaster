@@ -31,9 +31,28 @@
         <br>
         <div class="jumbotron">
             <h1>Check Your Ranking</h1>
-            <br>
-            <p class="lead">Click the button at the above to go to the game ranking board!</p>
+            
         </div>
+        <table class="table table-hover">
+            <thead>
+                <th>#</th>
+                <th>USER</th>
+                <th>SCORE</th>
+                <th>COMMENTS</th>
+            </thead>
+
+            <% rank_list.forEach((li,idx)=> { %>
+                <tr>
+                    <td><%= idx+1 %></td>
+                    <td><%= li.name %></td>
+                    <td><%= li.score %> </td>
+                    <td><%= li.comment %></td>
+                </tr>
+            <% }) %>
+        </table>
+
+
+
         <% include ../footer %>
     </div>
 </body>
