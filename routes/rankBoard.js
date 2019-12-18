@@ -21,15 +21,14 @@ router.get('/catchMyMind', (req,res) => {
 })
 
 router.get('/dodge', (req,res) => {
+    const rank = [];
     pool.getConnection((err,conn)=> {
-        if(!err) {
-            
-        }
+        conn.query('select  from dodge ord')
     })
 })
 
 router.get('/', (req,res) => {
-    res.render('rank/main');
+    res.render('rank/main',{message : 'Check Your Ranking'});
 })
 
 
