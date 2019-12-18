@@ -42,10 +42,6 @@ router.post('/register', (req,res) => {
     })
 
     pool.getConnection((err, connection) => {
-        connection.query('select email from user where name=?',[req.user],(err,rows) =>{
-            sql.email = rows[0].email;
-            connection.release();
-        })
         sql.name = req.user;
         sql.title = req.body.title,
         sql.content = req.body.content,
@@ -58,6 +54,7 @@ router.post('/register', (req,res) => {
             res.redirect('/board')
         });
     })
+    
 })
 
 
