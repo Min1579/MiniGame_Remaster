@@ -20,18 +20,16 @@ router.get('/catchMyMind', (req,res) => {
     })
 })
 
-router.get('/', (req,res) => {
-    pool.getConnection((err,connection) => {
-        connection.query('select * from dodge order by score desc', (err,rows) =>{
-            connection.release();
-            console.log("정윤이 바보",rows);
-            res.render('rank/main',{"list":[{
-                name: (typeof rows === "undefined") ? null : rows.name,
-                score: (typeof rows ==="undefined") ? null : rows.score
-            }]});
-        })
+router.get('/dodge', (req,res) => {
+    pool.getConnection((err,conn)=> {
+        if(!err) {
+            
+        }
     })
-    //res.render('rank/main');
+})
+
+router.get('/', (req,res) => {
+    res.render('rank/main');
 })
 
 
