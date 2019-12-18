@@ -105,6 +105,7 @@ app.post('/room', (req, res) => {
 
 app.get('/:room', (req, res) => {
   if (rooms[req.params.room] == null) {
+    return res.redirect('/cmm')
   }
 
   res.render('catchMind/room', {
