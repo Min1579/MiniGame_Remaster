@@ -19,9 +19,16 @@ imgBall.src = "../images/dodge/ball.png";
 overImg.src = "../images/dodge/over.png";
 boomImg.src = "../images/dodge/boom.gif";
 
+const bgm = new Audio('../images/dodge/sounds/dodgebgm.mp3');
+const explosion = new Audio('../images/dodge/sounds/explosion.mp3');
+bgm.pause();
+bgm.loop=true;
+bgm.play();
+
 var ballArr = [];
 
 function init() {
+
   const name = document.querySelector('#user').innerHTML;
   getScore(`http://${window.location.hostname}:${window.location.port}/dodge/getScore`,name);
   imgPlane.src = "../images/dodge/plane.png"
@@ -139,6 +146,7 @@ function drawBall(plane, ball) {
       ball.ycnt = -ball.ycnt
     }
     if (Math.abs(plane.x - ball.x) < 10 && Math.abs(plane.y - ball.y) < 10) {
+      explosion.play();
       const bx = plane.x;
       const by = plane.y;
       imgPlane.src = '';
@@ -155,9 +163,14 @@ function drawBall(plane, ball) {
           clearInterval(i);
         }
         ctx.drawImage(overImg, 150, 100, 300, 200);
-        var btn = document.createElement("button");
-        document.querySelector('.btn-wrapper').appendChild(btn);
-        document.querySelector('button').outerHTML = '<button onclick="init()" class="game">Restart?</button>';
+
+        //버튼 중복생성 버그 수정
+        if (document.querySelector("button") == null){
+          var btn = document.createElement("button");
+          document.querySelector('.btn-wrapper').appendChild(btn);
+          document.querySelector('button').outerHTML = '<button onclick="init()" class="game">Restart?</button>';
+
+        }
         const name = document.querySelector('#user').innerHTML;
         const highScore = parseInt(document.querySelector('#highScore').innerText);
         const score = parseInt(document.querySelector('#score').innerText);
