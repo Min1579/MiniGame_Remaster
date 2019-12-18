@@ -41,13 +41,13 @@
                 <th>COMMENTS</th>
             </thead>
 
-            <% list.forEach((li,idx)=> { %>
+            <% rank_list.forEach((li,idx)=> { %>
                 <tr>
                     <td><%= idx+1 %></td>
                     <td><%= li.name %></td>
-                    <td><%= li.point %> </td>
-                    <td></td>
-                </tr>
+                    <td><%= li.score %> </td>
+                    <td><%= li.comment %></td>
+                </tr>   
             <% }) %>
         </table>
 
