@@ -23,7 +23,9 @@ router.post('/getScore',(req,res)=>{
             }
             connection.release();
         });
-        connection.query('select score from dodge where name=?',name,(err,rows)=>{
+    });
+    pool.getConnection((err,conn) => {
+        conn.query('select score from dodge where name=?',name,(err,rows)=>{
             if (err) throw error;
             if (rows[0]){
                 resData.score = rows[0].score;
@@ -35,7 +37,7 @@ router.post('/getScore',(req,res)=>{
             res.json(resData);
             connection.release();
         });
-    });
+    })
 });
 
 router.post('/updateScore',(req,res)=>{
