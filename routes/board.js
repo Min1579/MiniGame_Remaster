@@ -5,57 +5,61 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const mysql = require('mysql2');
 
-router.get('/', (req, res) => {
-    pool.getConnection((err, connection) => {
-        const blist = [];
-        connection.query('select * from board order by no desc', (err, rows) => {
-            if (err) throw err;
+router.get('/', (req,res) => {
+    pool.getConnection((err, conn) => {
+        conn.query('select * from board order by no desc', (err,rows) => {
+            const blist = [];
             rows.forEach(row => {
-                blist.push({
-                    no: row.no,
-                    title: row.title,
-                    writer: row.name,
-                    postdate: row.postdate,
-                    view: row.view
-                });
-            });
-            connection.release();
-            res.render('board/main', {
-                'list': blist
+                console.log(row);
+                const list = {};
+                list.no = row.no;
+                list.title = row.title;
+                list.name = row.name;
+                list.postdate = row.postdate,
+                list.view = row.view;
+                blist.push(list)
             })
+            conn.release();
+            res.render('board/main', {'board_list': blist});
         })
     })
 });
-
 // 게시글 작성
 router.get('/register', (req, res) => {
     if (!req.user) res.redirect('/login')
     return res.render('board/register')
 })
 
+
 //게시글 작성완료
-router.post('/register', (req, res) => {
+router.post('/register', (req,res) => {
     const sql = {}
-    pool.getConnection((err, connection) => {
-        connection.query('select email from user where name =?', [req.user], (err, rows) => {
-            sql.email = rows[0].email,
-                sql.name = req.user,
-                sql.title = req.body.title,
-                sql.content = req.body.content,
-                sql.postdate = (new Date()).toDateString(),
-                sql.view = 0,
-                sql.b_pwd = req.body.pwd
+    pool.getConnection((err,connection) => {
+        connection.query('select email from user where name=?',[req.user], (err,rows) => {
+            sql.email = rows[0].email;
             connection.release();
         })
-        pool.getConnection((err, connection) => {
-            connection.query('insert into board set ?', [sql], (err, rows) => {
-                if (err) throw err;
-                connection.release();
-            })
+    })
+
+    pool.getConnection((err, connection) => {
+        connection.query('select email from user where name=?',[req.user],(err,rows) =>{
+            sql.email = rows[0].email;
+            connection.release();
         })
-        return res.redirect('/board');
+        sql.name = req.user;
+        sql.title = req.body.title,
+        sql.content = req.body.content,
+        sql.postdate = (new Date()).toDateString();
+        sql.view = 0;
+        sql.b_pwd = req.body.pwd;
+        console.log(sql);
+        connection.query('insert into board set ?', [sql], (err,rows) => {
+            connection.release();
+            res.redirect('/board')
+        });
     })
 })
+
 
 // 게시글 업데이트
 
@@ -136,68 +140,60 @@ router.get('/delete_reply', (req, res) => {
 })
 
 router.post('/post_reply', (req, res) => {
-    pool.getConnection((err, connection) => {
+    const r = {};
+    const pageNum = req.body.ref;
+    pool.getConnection((err, conn) => {
         const body = req.body;
-        const r = {
-            ref: body.ref,
-            r_content: body.r_content,
-            postdate: (new Date()).toDateString(),
-            name: req.user
-        };
+        r.ref = body.ref;
+        r.r_content = body.r_content;
+        r.postdate = (new Date()).toDateString();
+        r.name = req.user;
         console.log(r);
-        if (err) throw err;
-        connection.query(`insert into reply set ?`, [r], (err, rows) => {
+        conn.query('insert into reply set ?', [r], (err, rows) => {
             console.log('reply inserted');
-            connection.release()
+            conn.release()
+            res.redirect(`/board/b?no=${pageNum}`);
         })
-        res.redirect(`/board/b?no=${req.body.ref}`)
     });
 });
 
-router.get('/b', (req, res) => {
-    const no = req.query.no || req.params.no
+router.get('/b', (req,res) => {
+    const no = req.query.no || req.params.no;
+    const post = {};
+    const replies = [];
     pool.getConnection((err, connection) => {
         connection.query('update board set view=view+1 where no = ?', [no], (err, rows) => {
             console.log('view updated!');
             connection.release();
         })
     });
-    const p = {};
-    pool.getConnection((err, connection) => {
-        if (err) throw err;
-        connection.query('select * from board where no = ?', [no], (err, rows) => {
-            p.no = req.query.no || req.body.no
-            p.title = rows[0].title;
-            p.name = rows[0].name;
-            p.postdate = rows[0].postdate;
-            p.content = rows[0].content;
-            connection.release();
+    pool.getConnection((err,conn)=> {
+        conn.query('select * from board where no=?',[no],(err,rows)=>{
+            post.no = no;
+            post.title = rows[0].title;
+            post.name = rows[0].name;
+            post.postdate = rows[0].postdate;
+            post.content = rows[0].content;
+            conn.release();
         })
     })
-    const replies = [];
-    pool.getConnection((err, connection) => {
-        if (err) throw err;
-        connection.query('select * from reply where ref = ?', [no], (err, rows) => {
-            if (rows.length > 0) {
-                rows.forEach(row => {
-                    const r = {}
-                    r.name = row.name,
-                    r.postdate = row.postdate
-                    r.no = row.no;
-                    r.r_content = row.r_content;
-                    replies.push(r);
-                })
-            }
-            connection.release();
+    pool.getConnection((err, conn) => {
+        conn.query('select * from reply where ref = ?', [no],(err,rows) => {
+            rows.forEach(row => {
+                const reply = {};
+                reply.name = row.name;
+                reply.no = row.no;
+                reply.postdate = row.postdate;
+                reply.r_content = row.r_content;
+                replies.push(reply);
+            })
+            conn.release();
+            res.render('board/post', {p:post, replies:replies});
         })
     })
-    console.log('################',p,'################',replies)
-    res.render('board/post', {
-        p: p,
-        replies: replies
-    });
-});
 
+
+})
 
 
 module.exports = router;
